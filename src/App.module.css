@@ -1,0 +1,9 @@
+.App{
+    display: flex;
+}
+
+.Content{
+    padding: 10px;
+    width: auto;
+    overflow: scroll;
+}

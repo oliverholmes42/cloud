@@ -1,0 +1,21 @@
+:root{
+    --white: #FDFDFF;
+    --black: #090809;
+    --accent: #CFC8D8;
+
+    --block: #F6F6F8;
+    --darkBlock: #EEEEF0;
+
+    background-color: var(--white);
+}
+
+*{
+    color: var(--black);
+    margin: 0;
+}
+
+.block{
+    padding: 10px;
+    border-radius: 20px;
+    background-color: var(--block);
+}

@@ -1,0 +1,30 @@
+.Navbar{
+    width: 150px;
+    min-width: 150px;
+    min-height: 100vh;
+    overflow: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center;
+}
+
+
+.logo{
+    width: 80%;
+    margin: 20px 0;
+}
+
+.MenuItem{
+    padding: 10px;
+    border-bottom: 2px solid var(--block);
+    text-align: center;
+}
+
+.MenuItem:hover{
+    background-color: var(--block);
+    cursor: pointer;
+}
+
+.MenuItem.active{
+    background-color: var(--accent);
+
+}

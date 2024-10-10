@@ -1,0 +1,11 @@
+[
+    { "week": "Week 1", "orders": 45 },
+    { "week": "Week 2", "orders": 70 },
+    { "week": "Week 3", "orders": 60 },
+    { "week": "Week 4", "orders": 90 },
+    { "week": "Week 5", "orders": 110 },
+    { "week": "Week 6", "orders": 80 },
+    { "week": "Week 7", "orders": 130 },
+    { "week": "Week 8", "orders": 150 }
+  ]
+  
