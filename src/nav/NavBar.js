@@ -3,11 +3,13 @@ import styles from "./NavBar.module.css";
 import logo from '../media/Spaider-logo-black-RGB.png';
 import Dash from "../Pages/Dash";
 import React, { useEffect, useMemo } from 'react';
+import ProductPage from "../Pages/ProductPage";
 
 export default function Navbar({ setActive, active }) { // Add activePage prop
     const items = useMemo(() => [
         { title: "Dashboard", page: <Dash /> },
-        { title: "Settings", page: <Settings /> }
+        { title: "Settings", page: <Settings /> },
+        {title:"Produkter", page: <ProductPage/>}
     ], []);
 
     useEffect(() => {
