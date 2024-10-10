@@ -1,16 +1,24 @@
-import Settings from "../Pages/Settings";
+import Settings from "../navPages/SettingsPage";
 import styles from "./NavBar.module.css";
 import logo from '../media/Spaider-logo-black-RGB.png';
-import Dash from "../Pages/Dash";
+import Dash from "../navPages/DashPage";
 import React, { useEffect, useMemo } from 'react';
-import ProductPage from "../Pages/ProductPage";
+import ProductPage from "../navPages/ProductPage";
+import { useStack } from "../StackContext";
 
 export default function Navbar({ setActive, active }) { // Add activePage prop
     const items = useMemo(() => [
         { title: "Dashboard", page: <Dash /> },
         { title: "Settings", page: <Settings /> },
-        {title:"Produkter", page: <ProductPage/>}
+        {title: "Artiklar", page: <ProductPage/>}
     ], []);
+
+    const {flush} = useStack();
+
+    const navigate = (page) => {
+        flush();
+        setActive(page);
+    }
 
     useEffect(() => {
         setActive(items[0].page);
@@ -23,7 +31,7 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
 
         return (
             <div 
-                onClick={() => setActive(page.page)} 
+                onClick={()=>navigate(page.page)} 
                 className={`${styles.MenuItem} ${isActive ? styles.active : ''}`}>
                 <h3>{page.title}</h3>
             </div>

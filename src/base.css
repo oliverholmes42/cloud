@@ -19,7 +19,6 @@
 body {
     font-family: Arial, sans-serif;
     background-color: var(--white);
-    padding: 20px;
 }
 
 /* Block elements styling */
@@ -32,6 +31,7 @@ body {
 }
 
 /* General table styling */
+/* General table styling */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -39,6 +39,7 @@ table {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* Ensures rounded corners are visible */
+    table-layout: fixed; /* Ensures columns have consistent width */
 }
 
 /* Styling for table headers */
@@ -51,6 +52,9 @@ th {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.9rem;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Prevent content from overflowing */
+    text-overflow: ellipsis; /* Adds ellipsis (...) if text is too long */
 }
 
 /* Styling for table rows */
@@ -59,6 +63,9 @@ td {
     border-bottom: 1px solid var(--darkBlock);
     font-size: 0.7rem;
     vertical-align: middle;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Prevent content from overflowing */
+    text-overflow: ellipsis; /* Adds ellipsis (...) if text is too long */
 }
 
 /* Alternating row colors */
@@ -73,6 +80,18 @@ tr:hover {
     cursor: pointer;
 }
 
+/* Ensure input fields don't overflow their columns */
+td input, td select {
+    width: 100%; /* Take the full width of the table cell */
+    max-width: 100%; /* Prevent input from exceeding cell width */
+    box-sizing: border-box; /* Include padding in the element's width */
+    padding: 8px; /* Add padding to inputs */
+    font-size: 0.7rem; /* Match the font size with table data */
+    border: 1px solid var(--darkBlock); /* Add a border for better visibility */
+    border-radius: 4px; /* Small border-radius for input fields */
+    background-color: var(--white); /* Keep input background consistent */
+}
+
 /* Responsive table for small screens */
 @media (max-width: 768px) {
     table {
@@ -80,8 +99,34 @@ tr:hover {
         overflow-x: auto;
         white-space: nowrap;
     }
-    
+
     th, td {
         padding: 12px 8px;
     }
+
+    td input, td select {
+        padding: 6px; /* Adjust padding for smaller screens */
+        font-size: 0.65rem; /* Slightly smaller font on smaller screens */
+    }
 }
+
+
+.hoverable {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer; /* Change the cursor to pointer */
+  }
+  
+  /* Hover effect for all elements with .hoverable */
+  .hoverable:hover {
+    transform: scale(1.003); /* Scale the element slightly */
+  }
+  
+  /* Change background color for elements with only .hoverable (and not .icon) */
+  .hoverable:not(.icon):hover {
+    background-color: var(--darkBlock); /* Change the background color */
+  }
+  
+  /* Change text or icon color for elements with both .hoverable and .icon */
+  .hoverable.icon:hover {
+    color: var(--darkBlock); /* Change the color of the element */
+  }

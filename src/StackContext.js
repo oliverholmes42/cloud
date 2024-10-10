@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 // Create the context
 const StackContext = createContext();
@@ -12,6 +14,11 @@ export const StackProvider = ({ children }) => {
     setStack((prevStack) => [...prevStack, Component]);
   };
 
+  // Remove the last page from the stack (LIFO)
+  const pop = () => {
+    setStack((prevStack) => prevStack.slice(0, -1));
+  };
+
   // Remove the first page from the stack (FIFO)
   const drop = () => {
     setStack((prevStack) => prevStack.slice(1));
@@ -23,7 +30,7 @@ export const StackProvider = ({ children }) => {
   };
 
   return (
-    <StackContext.Provider value={{ stack, push, drop, flush }}>
+    <StackContext.Provider value={{ stack, push, pop, drop, flush }}>
       {children}
     </StackContext.Provider>
   );
@@ -36,7 +43,16 @@ export const useStack = () => {
 
 // StackContent component to render the top component (last in the stack)
 export const StackContent = () => {
-  const { stack } = useStack();
+  const { stack, pop } = useStack();
 
-  if(stack.length>0)return stack[stack.length -1];
+  if (stack.length > 0) {
+    return (
+      <div>
+        <FontAwesomeIcon icon={faArrowLeft} size='2xl' className='hoverable icon' onClick={pop}/>
+        {stack[stack.length - 1]}
+      </div>
+    );
+  }
+
+  return null;
 };
