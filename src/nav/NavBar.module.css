@@ -17,6 +17,8 @@
     padding: 10px;
     border-bottom: 2px solid var(--block);
     text-align: center;
+    display: flex;
+    gap: 15px;
 }
 
 .MenuItem:hover{

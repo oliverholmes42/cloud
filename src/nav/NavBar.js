@@ -5,12 +5,18 @@ import Dash from "../navPages/DashPage";
 import React, { useEffect, useMemo } from 'react';
 import ProductPage from "../navPages/ProductPage";
 import { useStack } from "../StackContext";
+import InvoicePage from "../navPages/InvoicePage";
+import IntegrationPage from "../navPages/IntegrationPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxesStacked, faFileLines, faGaugeHigh, faGears, faPlug } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar({ setActive, active }) { // Add activePage prop
     const items = useMemo(() => [
-        { title: "Dashboard", page: <Dash /> },
-        { title: "Settings", page: <Settings /> },
-        {title: "Artiklar", page: <ProductPage/>}
+        { title: "Dashboard", page: <Dash />, icon: faGaugeHigh },
+        { title: "Artiklar", page: <ProductPage/>, icon: faBoxesStacked },
+        { title: "Faktura", page: <InvoicePage />, icon: faFileLines },
+        { title: "Intigration", page: <IntegrationPage />, icon: faPlug },
+        { title: "Inställningar", page: <Settings />, icon: faGears }
     ], []);
 
     const {flush} = useStack();
@@ -27,13 +33,13 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
     const MenuItem = ({ page }) => {
         // Determine if the current page is active
         const isActive = active === page.page;
-        console.log(isActive)
 
         return (
             <div 
                 onClick={()=>navigate(page.page)} 
                 className={`${styles.MenuItem} ${isActive ? styles.active : ''}`}>
-                <h3>{page.title}</h3>
+                <FontAwesomeIcon icon={page.icon} size="sm"/>
+                <p>{page.title}</p>
             </div>
         );
     };

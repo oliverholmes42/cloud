@@ -1,7 +1,8 @@
-/* Drawer.module.css */
 
-/* Main drawer container */
-.drawer {
+  
+  /* Spacing between blocks of content within the drawer */
+  .block {
+    margin-bottom: 15px; /* Add space between each block */
     display: flex;
     flex-direction: column;
     padding: 20px; /* Padding around the drawer */
@@ -12,37 +13,10 @@
     color: #333; /* Base text color */
   }
   
-  /* Spacing between blocks of content within the drawer */
-  .drawer .block {
-    margin-bottom: 15px; /* Add space between each block */
-  }
-  
   /* Optional styling for individual items within the blocks */
-  .drawer .hoverable {
+  .item {
     padding: 10px 15px; /* Padding for items */
     border-radius: 5px; /* Rounded corners for hoverable items */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
     color: #444; /* Text color */
   }
-  
-  /* Hover effect for hoverable items */
-  .drawer .hoverable:hover {
-    background-color: #ececec; /* Slight background color change on hover */
-    transform: scale(1.02); /* Small scaling effect */
-    cursor: pointer; /* Pointer cursor */
-  }
-  
-  /* Custom scrollbar for the drawer */
-  .drawer::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .drawer::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
-  
-  .drawer::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
-  }
-  

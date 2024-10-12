@@ -1,38 +1,4 @@
-:root{
-    --white: #FDFDFF;
-    --black: #090809;
-    --accent: #CFC8D8;
-    --darkAccent: #484053;
-
-    --block: #F6F6F8;
-    --darkBlock: #EEEEF0;
-
-    background-color: var(--white);
-}
-
-* {
-    color: var(--black);
-    margin: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: var(--white);
-}
-
-/* Block elements styling */
-.block {
-    padding: 20px;
-    border-radius: 20px;
-    background-color: var(--block);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-}
-
-/* General table styling */
-/* General table styling */
-table {
+.table {
     width: 100%;
     border-collapse: collapse;
     background-color: var(--white);
@@ -43,7 +9,7 @@ table {
 }
 
 /* Styling for table headers */
-th {
+.th {
     background-color: var(--darkAccent);
     color: var(--white);
     font-weight: bold;
@@ -58,10 +24,10 @@ th {
 }
 
 /* Styling for table rows */
-td {
-    padding: 15px 10px;
+.td {
+    padding: 12px 10px;
     border-bottom: 1px solid var(--darkBlock);
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     vertical-align: middle;
     white-space: nowrap; /* Prevent text from wrapping */
     overflow: hidden; /* Prevent content from overflowing */
@@ -69,9 +35,12 @@ td {
 }
 
 /* Alternating row colors */
-tr:nth-child(even) {
-    background-color: var(--darkBlock);
+
+
+.oddRow{
+    background-color: var(--white);
 }
+
 
 /* Hover effect on rows */
 tr:hover {
@@ -81,8 +50,8 @@ tr:hover {
 }
 
 /* Ensure input fields don't overflow their columns */
-input, select {
-    width: auto; /* Take the full width of the table cell */
+td input, td select {
+    width: 100%; /* Take the full width of the table cell */
     max-width: 100%; /* Prevent input from exceeding cell width */
     box-sizing: border-box; /* Include padding in the element's width */
     padding: 8px; /* Add padding to inputs */
@@ -94,13 +63,13 @@ input, select {
 
 /* Responsive table for small screens */
 @media (max-width: 768px) {
-    table {
+    .table {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
     }
 
-    th, td {
+    .th, .td {
         padding: 12px 8px;
     }
 
@@ -109,41 +78,3 @@ input, select {
         font-size: 0.65rem; /* Slightly smaller font on smaller screens */
     }
 }
-
-
-.hoverable {
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    cursor: pointer; /* Change the cursor to pointer */
-  }
-  
-  /* Hover effect for all elements with .hoverable */
-  .hoverable:hover {
-    transform: scale(1.003); /* Scale the element slightly */
-  }
-  
-  /* Change background color for elements with only .hoverable (and not .icon) */
-  .hoverable:not(.icon):hover {
-    background-color: var(--darkBlock); /* Change the background color */
-    color: var(--black)
-  }
-  
-  /* Change text or icon color for elements with both .hoverable and .icon */
-  .hoverable.icon:hover {
-    color: var(--darkBlock); /* Change the color of the element */
-  }
-
-  button {
-    background-color: var(--block);
-    border: none; /* Remove default border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 5px 10px; /* Space inside the button */
-    font-size: 14px; /* Readable text size */
-    cursor: pointer; /* Change cursor to pointer on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
-
-  .delete:hover{
-    background-color: #A4243B !important;
-    color: var(--block) !important;
-  }
-  

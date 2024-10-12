@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
 // Create the context
 const StackContext = createContext();
@@ -46,11 +46,15 @@ export const StackContent = () => {
   const { stack, pop } = useStack();
 
   if (stack.length > 0) {
+    const {page, title} = stack[stack.length - 1];
     return (
-      <div>
-        <FontAwesomeIcon icon={faArrowLeft} size='2xl' className='hoverable icon' onClick={pop}/>
-        {stack[stack.length - 1]}
-      </div>
+      <>
+        <div style={{display: "flex", marginBottom: "20px", alignItems: "center"}}>
+          <FontAwesomeIcon icon={faArrowLeft} size='2xl' className='hoverable icon' onClick={pop}/>
+          <h2 style={{marginLeft: "20px"}}>{title}</h2>
+        </div>
+        {page}
+      </>
     );
   }
 

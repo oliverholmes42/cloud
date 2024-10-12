@@ -3,6 +3,7 @@ import { StackContent, StackProvider, useStack } from "./StackContext";
 import Navbar from "./nav/NavBar";
 import './base.css';
 import styles from './App.module.css';
+import { Toaster } from 'react-hot-toast';
 
 function AppContent({ active, setActive }) {
   const { stack } = useStack();
@@ -25,6 +26,10 @@ function App() {
         <Navbar setActive={setActive} active={active} />
         <AppContent active={active} setActive={setActive} />
       </div>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+      />
     </StackProvider>
   );
 }
