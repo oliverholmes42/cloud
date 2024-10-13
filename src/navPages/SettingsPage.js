@@ -1,38 +1,40 @@
 // src/pages/ProductPage.jsx
 
 import React, {useMemo} from 'react';
-import Categories from '../stackPages/articles/Categories';
 import Drawer from '../nav/Drawer';
+import PlaceholderPage from '../stackPages/PlaceholderPage';
 
 export default function Settings() {
+
+    const temp = <PlaceholderPage/>
     const items = useMemo(() => [
         [
           { title: "User Management" },
-          { title: "Role Permissions", page: <Categories /> },
-          { title: "Employee Profiles", page: <Categories /> },
-          { title: "Access Logs", page: <Categories /> },
-          { title: "Audit Trails", page: <Categories /> },
+          { title: "Role Permissions", page: temp },
+          { title: "Employee Profiles", page: temp },
+          { title: "Access Logs", page: temp },
+          { title: "Audit Trails", page: temp },
         ],
         [
           { title: "Inventory Control"},
-          { title: "Product Listings", page: <Categories /> },
-          { title: "Supplier Management", page: <Categories /> },
-          { title: "Stock Levels", page: <Categories /> },
-          { title: "Reorder Points", page: <Categories /> },
-          { title: "Warehouse Locations", page: <Categories /> },
+          { title: "Product Listings", page: temp },
+          { title: "Supplier Management", page: temp },
+          { title: "Stock Levels", page: temp },
+          { title: "Reorder Points", page: temp },
+          { title: "Warehouse Locations", page: temp },
         ],
         [
           { title: "Sales Reports" },
-          { title: "Daily Sales", page: <Categories /> },
-          { title: "Monthly Performance", page: <Categories /> },
-          { title: "Sales Forecasting", page: <Categories /> },
-          { title: "Top Products", page: <Categories /> },
+          { title: "Daily Sales", page: temp },
+          { title: "Monthly Performance", page: temp },
+          { title: "Sales Forecasting", page: temp },
+          { title: "Top Products", page: temp },
         ],
         [
           { title: "Payment Settings" },
-          { title: "Tax Configuration", page: <Categories /> },
-          { title: "Discount Rules", page: <Categories /> },
-          { title: "Currency Management", page: <Categories /> },
+          { title: "Tax Configuration", page: temp },
+          { title: "Discount Rules", page: temp },
+          { title: "Currency Management", page: temp },
         ],
       ], []);
     return (

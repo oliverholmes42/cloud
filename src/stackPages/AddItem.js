@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useStack } from "../StackContext";
 
-export default function AddItem({fields, onCreate}){
-    const {pop} = useStack();
-     // Initialize state for form data
+export default function AddItem({fields, onCreate}) {
+  const { pop } = useStack();
+  
+  // Initialize state for form data
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => {
       acc[field.key] = field.type === 'select' ? field.options[0] : ''; // Set default values based on field type
@@ -32,51 +33,42 @@ export default function AddItem({fields, onCreate}){
   };
 
   return (
-    <form onSubmit={handleSubmit} >
+    <form onSubmit={handleSubmit}>
       {fields.map((field) => (
-        <div key={field.key} >
-          <label >{field.title}</label>
-          {field.type === 'text' && (
-            <input
-              type="text"
-              value={formData[field.key]}
-              onChange={(e) => handleInputChange(field.key, e.target.value)}
-
-            />
-          )}
-          {field.type === 'number' && (
-            <input
-              type="number"
-              value={formData[field.key]}
-              onChange={(e) => handleInputChange(field.key, e.target.value)}
-
-            />
-          )}
-          {field.type === 'select' && (
-            <select
-              value={formData[field.key]}
-              onChange={(e) => handleInputChange(field.key, e.target.value)}
-              
-            >
-              {field.options.map((option, index) => (
-                <option key={index} value={option}>
-                  {option === true ? 'Yes' : option === false ? 'No' : option}
-                </option>
-              ))}
-            </select>
-          )}
-          {field.type === 'read' && (
-            <input
-              type="text"
-              value={formData[field.key]}
-              readOnly
-            />
-          )}
-        </div>
+        field.type !== 'read' && ( // Don't render anything if the field type is 'read'
+          <div key={field.key}>
+            <label>{field.title}</label>
+            {field.type === 'text' && (
+              <input
+                type="text"
+                value={formData[field.key]}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+              />
+            )}
+            {field.type === 'number' && (
+              <input
+                type="number"
+                value={formData[field.key]}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+              />
+            )}
+            {field.type === 'select' && (
+              <select
+                value={formData[field.key]}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+              >
+                {field.options.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option === true ? 'Yes' : option === false ? 'No' : option}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        )
       ))}
-      <button type="submit" >
-        Create Item
-      </button>
+      <button type="submit">Create Item</button>
     </form>
   );
 }
+

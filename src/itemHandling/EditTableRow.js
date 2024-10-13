@@ -1,35 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-
-// Custom input renderer based on type
-const CustomInput = ({ type, value, onChange, options }) => {
-  if (type === 'read') {
-    return <span>{value}</span>;
-  }
-
-  switch (type) {
-    case 'text':
-      return <input type="text" value={value} onChange={onChange} />;
-    case 'number':
-      return <input type="number" value={value} onChange={onChange} />;
-    case 'select':
-      return (
-        <select value={value} onChange={onChange}>
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      );
-    default:
-      return <input type="text" value={value} onChange={onChange} />;
-  }
-};
 
 // EditTableRow Component
 export default function EditTableRow({ item, fields, onSave, onDelete }) {
   const [formData, setFormData] = useState(item);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.select();
+    }
+  }, [ref]);
 
   const handleInputChange = (e, field) => {
     let value = e.target.value;
@@ -60,6 +41,62 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
     onDelete(item.id); // Trigger delete callback
   };
 
+  // Custom input rendering function
+  const renderInput = (field, value, index) => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        save(); // Save the form when Enter is pressed
+      }
+    };
+
+    if (field.type === 'read') {
+      return <span>{value}</span>;
+    }
+
+    switch (field.type) {
+      case 'text':
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+          />
+        );
+      case 'number':
+        return (
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+          />
+        );
+      case 'select':
+        return (
+          <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
+            {field.options.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+      default:
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+          />
+        );
+    }
+  };
+
   return (
     <tr>
       {fields.map((field, index) => (
@@ -69,12 +106,7 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
           ) : index === fields.length - 1 ? (
             <button className='hoverable delete' onClick={remove}>Radera</button>
           ) : (
-            <CustomInput
-              type={field.type}
-              value={formData[field.key]} // Ensure value is correctly parsed
-              onChange={(e) => handleInputChange(e, field)}
-              options={field.options || []}
-            />
+            renderInput(field, formData[field.key], index)
           )}
         </td>
       ))}

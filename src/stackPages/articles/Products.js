@@ -33,9 +33,13 @@ export default function Products() {
     console.log(newItem)
   };
 
+  const goToAdd = () => {
+    push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Ny produkt"})
+  }
+
   return (<>
-      <div style={{display: "flex"}}>
-        <button onClick={()=>{push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Lägg till"})}}>Skapa ny</button>
+      <div style={{display: "flex", padding: "10px"}}>
+        <button  className="hoverable" onClick={goToAdd}>Skapa ny</button>
         <SearchBar/>
       </div>
       <ItemTable

@@ -1,0 +1,76 @@
+/* Container for the login page */
+.loginContainer {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px 40px 10px 40px;
+    background-color: var(--block);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Title of the login form */
+.loginTitle {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--black);
+}
+
+/* Form container */
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Each input group (label and input) */
+.inputGroup {
+    margin-bottom: 20px;
+}
+
+/* Input fields */
+.inputField {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid var(--darkBlock);
+    border-radius: 8px;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* Change border color on focus */
+.inputField:focus {
+    border-color: var(--accent);
+    outline: none;
+    background-color: var(--white);
+}
+
+/* Button for submitting login */
+.loginButton {
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: var(--accent);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* Hover effect on the login button */
+.loginButton:hover {
+    background-color: var(--white);
+    color: var(--black);
+    transform: scale(1.02);
+}
+
+/* Error message styling */
+.fair {
+    color: var(--block);
+    margin: 10px auto
+}
+
+.error{
+    color: red
+}

@@ -13,20 +13,40 @@
     margin: 20px 0;
 }
 
-.MenuItem{
-    padding: 10px;
-    border-bottom: 2px solid var(--block);
+.MenuItem {
+    padding: 12px; /* Sleek padding for a minimal feel */
     text-align: center;
     display: flex;
-    gap: 15px;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the start for iOS-like feel */
+    transition: background-color 0.2s, transform 0.2s; /* Smooth transition */
+    font-weight: 500; /* Simple, slightly bold text */
+    color: var(--black); /* Keep text color crisp and clean */
+    background-color: transparent; /* No background by default */
+    margin: 5px 0 5px 0;
 }
 
-.MenuItem:hover{
-    background-color: var(--block);
+.Logout{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 15px 20px;
+}
+
+.Section {
+    margin-bottom: 10px; /* Minimal spacing between sections */
+   
+    background-color: var(--block); /* Clean, subtle background for sections */
+}
+
+.MenuItem:hover {
+    background-color: var(--darkBlock); /* Slight background color change on hover */
     cursor: pointer;
 }
 
-.MenuItem.active{
-    background-color: var(--accent);
-
+.MenuItem.active {
+    background-color: var(--accent); /* Use the accent color for active item */
+    color: var(--black); /* Ensure text is readable against accent */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for focus */
 }

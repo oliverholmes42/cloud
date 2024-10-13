@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import data from '../../data/categories.json';
 import ItemTable from '../../components/ItemTable/ItemTable';
+import { useStack } from '../../StackContext';
+import AddItem from '../AddItem';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 export default function Categories(){
     const [tableData, setTableData] = useState(data);
+    const {push} = useStack();
 
     const fields = [
         {key: 'name',title: 'Namn',type: 'text', format: null },
@@ -56,14 +60,28 @@ export default function Categories(){
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };
+
+      const handleAdd = (newItem) => {
+        console.log(newItem)
+      };
+    
+      const goToAdd = () => {
+        push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Ny kategori"})
+      }
       
 
     return(
-        <ItemTable
-      fields={fields}
-      data={tableData}
-      onSave={handleSave}
-      onDelete={handleDelete}
-    />
+      <>
+      <div style={{display: "flex", padding: "10px"}}>
+        <button  className="hoverable" onClick={goToAdd}>Skapa ny</button>
+        <SearchBar/>
+      </div>
+          <ItemTable
+        fields={fields}
+        data={tableData}
+        onSave={handleSave}
+        onDelete={handleDelete}
+      />
+    </>
     )
 }
