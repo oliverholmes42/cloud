@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StackContent, StackProvider, useStack } from "./StackContext";
 import Navbar from "./nav/NavBar";
-import styles from './App.module.css';
+import styles from './Main.module.css';
 
 function AppContent({ active, setActive }) {
   const { stack } = useStack();
@@ -21,7 +21,7 @@ export default function Main() {
   return (
     <StackProvider>
       <div className={styles.App}>
-        <Navbar setActive={setActive} active={active} />
+        <Navbar setActive={setActive} active={active} className={styles.Navbar}/>
         <AppContent active={active} setActive={setActive} />
       </div>
     </StackProvider>

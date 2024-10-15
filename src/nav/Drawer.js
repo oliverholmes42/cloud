@@ -19,7 +19,7 @@ export default function Drawer({ routes }) {
                 <div 
                   key={itemIndex} 
                 >
-                  <h5>{item.title}</h5>
+                  <h5 style={{marginBottom: "5px"}}>{item.title}</h5>
                 </div>
               );
             } else {

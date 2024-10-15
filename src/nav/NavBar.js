@@ -9,25 +9,32 @@ import { useStack } from "../StackContext";
 import InvoicePage from "../navPages/InvoicePage";
 import IntegrationPage from "../navPages/IntegrationPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoxesStacked, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faBoxesStacked, faCashRegister, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import PlaceholderPage from "../stackPages/PlaceholderPage";
+import HardWarePage from "../navPages/HardWarePage";
 
 export default function Navbar({ setActive, active }) { // Add activePage prop
     // Define the items as a 2D list
     const items = useMemo(() => [
         [
-            { title: "Dashboard", page: <Dash />, icon: faGaugeHigh },
+            { title: "Översikt", page: <Dash />, icon: faGaugeHigh },
             
         ],
         [
             { title: "Artiklar", page: <ProductPage/>, icon: faBoxesStacked },
             { title: "Fakturor", page: <InvoicePage />, icon: faFileLines },
+            {title: "Hårdvara", page: <HardWarePage/>, icon: faCashRegister}
             
         ],
         [
-            { title: "Intigration", page: <IntegrationPage />, icon: faPlug },
-            { title: "Inställningar", page: <Settings />, icon: faGears }
-        ]
+            {title: "Administration", page: <PlaceholderPage/>, icon: faUserTie },
+            { title: "Integration", page: <IntegrationPage />, icon: faPlug }
+        ],
+        [{ title: "Inställningar", page: <Settings />, icon: faGears }]
     ], []);
+
+    
+    
 
     const {flush} = useStack();
 

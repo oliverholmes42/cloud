@@ -14,28 +14,28 @@ export default function Dash() {
         data={sales} 
         dataKey="sales" 
         xKey="hour" 
-        title="Hourly Sales"
+        title="Timförsäljning"
         referenceLine={{ value: '12:00', color: 'green' }}
       />
       <Chart
         data={visitors} 
         dataKey="visitors" 
         xKey="day"    // Specify the xKey for daily visitors (e.g., day of the week)
-        title="Daily Visitors"
+        title="Gäster"
         referenceLine={{ value: 'Monday',  color: 'blue' }}
       />
       <Chart 
         data={revenue} 
         dataKey="revenue" 
         xKey="month"  // Use 'month' or other relevant field
-        title="Monthly Revenue"
+        title="Omsättning"
         referenceLine={{ value: '15',  color: 'orange' }}
       />
       <Chart
         data={orders} 
         dataKey="orders" 
         xKey="week"   // If you have weekly data, use 'week' for the X-axis
-        title="Weekly Orders"
+        title="Beställningar"
         referenceLine={{ value: 'Wednesday',  color: 'purple' }}
       />
       </div>

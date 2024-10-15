@@ -6,9 +6,10 @@ import Categories from '../stackPages/articles/Categories';
 import Drawer from '../nav/Drawer';
 
 export default function ProductPage() {
-    const items = useMemo(() => [[
+    const items = useMemo(() => [[{title: "Artiklar"},
+
         { title: "Produkter", page: <Products /> },
-        { title: "Kategorier", page: <Categories /> }
+        { title: "Varugrupper", page: <Categories /> }
     ]], []);
     return (
         <Drawer routes={items}/>

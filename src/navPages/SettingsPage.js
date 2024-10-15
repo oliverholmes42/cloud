@@ -7,36 +7,38 @@ import PlaceholderPage from '../stackPages/PlaceholderPage';
 export default function Settings() {
 
     const temp = <PlaceholderPage/>
-    const items = useMemo(() => [
+    const items = [
+  
         [
-          { title: "User Management" },
-          { title: "Role Permissions", page: temp },
-          { title: "Employee Profiles", page: temp },
-          { title: "Access Logs", page: temp },
-          { title: "Audit Trails", page: temp },
+          { title: "Användarhantering" },
+          { title: "Rättigheter för roller", page: temp },
+          { title: "Anställdas profiler", page: temp },
+          { title: "Åtkomstloggar", page: temp },
+          { title: "Granskningsspår", page: temp },
         ],
         [
-          { title: "Inventory Control"},
-          { title: "Product Listings", page: temp },
-          { title: "Supplier Management", page: temp },
-          { title: "Stock Levels", page: temp },
-          { title: "Reorder Points", page: temp },
-          { title: "Warehouse Locations", page: temp },
+          { title: "Lagerkontroll" },
+          { title: "Produktlistor", page: temp },
+          { title: "Leverantörshantering", page: temp },
+          { title: "Lagerstatus", page: temp },
+          { title: "Beställningsnivåer", page: temp },
+          { title: "Lagerplatser", page: temp },
         ],
         [
-          { title: "Sales Reports" },
-          { title: "Daily Sales", page: temp },
-          { title: "Monthly Performance", page: temp },
-          { title: "Sales Forecasting", page: temp },
-          { title: "Top Products", page: temp },
+          { title: "Försäljningsrapporter" },
+          { title: "Daglig försäljning", page: temp },
+          { title: "Månatlig prestation", page: temp },
+          { title: "Försäljningsprognoser", page: temp },
+          { title: "Toppprodukter", page: temp },
         ],
         [
-          { title: "Payment Settings" },
-          { title: "Tax Configuration", page: temp },
-          { title: "Discount Rules", page: temp },
-          { title: "Currency Management", page: temp },
+          { title: "Betalningsinställningar" },
+          { title: "Skatteinställningar", page: temp },
+          { title: "Rabattregler", page: temp },
+          { title: "Valutahantering", page: temp },
         ],
-      ], []);
+            
+      ];
     return (
         <Drawer routes={items}/>
     );

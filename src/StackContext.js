@@ -2,10 +2,8 @@ import React, { createContext, useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 
-// Create the context
 const StackContext = createContext();
 
-// Provide the context
 export const StackProvider = ({ children }) => {
   const [stack, setStack] = useState([]);
 
@@ -36,12 +34,10 @@ export const StackProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the StackContext
 export const useStack = () => {
   return useContext(StackContext);
 };
 
-// StackContent component to render the top component (last in the stack)
 export const StackContent = () => {
   const { stack, pop } = useStack();
 

@@ -4,6 +4,7 @@ import Drawer from "../nav/Drawer"
 
 export default function InvoicePage(){
     const items = useMemo(() => [[
+        {title: "Fakturor"},
         { title: "Översikt", page: <Categories /> },
       ],
       [

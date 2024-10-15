@@ -37,7 +37,7 @@ export default function LoginPage() {
             <h2 className={styles.loginTitle}>Login</h2>
             <form onSubmit={handleSubmit} className={styles.loginForm}>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">Epost</label>
                     <input
                         id="email"
                         name="email" // Add the name attribute
@@ -45,11 +45,10 @@ export default function LoginPage() {
                         value={formData.email}
                         onChange={handleChange} // Use the generic handleChange
                         className={styles.inputField}
-                        placeholder="Enter your email"
                     />
                 </div>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Lösenord</label>
                     <input
                         id="password"
                         name="password" // Add the name attribute
@@ -57,7 +56,7 @@ export default function LoginPage() {
                         value={formData.password}
                         onChange={handleChange} // Use the generic handleChange
                         className={styles.inputField}
-                        placeholder="Enter your password"
+           
                     />
                 </div>
                 <button type="submit" className={styles.loginButton}>
