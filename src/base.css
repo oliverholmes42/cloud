@@ -117,6 +117,24 @@ input:focus {
     }
 }
 
+.desktop {
+    /* Styles for desktop elements */
+}
+
+.mobile {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .desktop {
+        display: none !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+}
+
 
 .hoverable {
     transition: background-color 0.3s ease, transform 0.2s ease;

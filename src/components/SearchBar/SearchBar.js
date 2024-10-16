@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './SearchBar.module.css'
+import FloatingButton from '../FloatingButton/FloatingButton';
 
 export default function SearchBar() {
     const [search, setSearch] = useState("");

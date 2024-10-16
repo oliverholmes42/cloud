@@ -8,6 +8,11 @@
     table-layout: fixed; /* Ensures columns have consistent width */
 }
 
+.mobileItem{
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Styling for table headers */
 .th {
     background-color: var(--darkAccent);

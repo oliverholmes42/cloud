@@ -11,8 +11,9 @@ export default function Products() {
 
   useEffect(()=>{console.log(tableData)},[tableData])
   const fields = [
-    { key: 'name', title: 'Namn', type: 'text' },
-    { key: 'selling_price', title: 'Pris', type: 'number', format: { type: 'number', suffix: ' kr' } },
+    { key: 'name', title: 'Namn', type: 'text', mobile: 1 },
+    { key: 'category', title: "Kategori", type: 'select', options: ["Öl", "Vin", "Drink", "Alkoholfritt"], mobile: 2},
+    { key: 'selling_price', title: 'Pris', type: 'number', format: { type: 'number', suffix: ' kr' }, mobile: 4 },
     { key: 'tax_rate', title: 'Moms', type: 'number', format: { type: 'percentage'} }, 
     { key: 'alcohol_content', title: 'Alkoholhalt', type: 'number', format: { type: 'percentage'} }, 
     { key: 'created_at', title: 'Created At', type: 'read', format: { type: 'date', locale: 'sv-SE', options: { year: 'numeric', month: 'long', day: 'numeric' } } },
@@ -38,10 +39,6 @@ export default function Products() {
   }
 
   return (<>
-      <div style={{display: "flex", padding: "10px"}}>
-        <button  className="hoverable" onClick={goToAdd}>Skapa ny</button>
-        <SearchBar/>
-      </div>
       <ItemTable
         fields={fields}
         data={tableData}

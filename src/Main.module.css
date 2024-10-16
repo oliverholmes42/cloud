@@ -1,8 +1,10 @@
 .App{
     display: flex;
+    flex-wrap: wrap;
 }
 
 .Content{
     padding: 10px;
     flex-grow: 1;
+    width: 300px;
 }

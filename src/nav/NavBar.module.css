@@ -10,6 +10,24 @@
     height: 100vh;
 }
 
+.NavBarIcon{
+    margin: 10px;
+}
+
+.MobileThings{
+    width: 100%
+}
+
+.MobileNav{
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: var(--white);
+}
+
 
 .logo{
     width: 80%;
