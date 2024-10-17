@@ -10,7 +10,7 @@ export default function Categories(){
     const {push} = useStack();
 
     const fields = [
-        {key: 'name',title: 'Namn',type: 'text', format: null },
+        {key: 'name',title: 'Namn',type: 'text', format: null, mobile: 1 },
         {key: 'tax',
           title: 'Moms',
           type: 'number', 
@@ -21,21 +21,24 @@ export default function Categories(){
           title: 'Typ',
           type: 'select', 
           options: ['Dryck', 'Mat'], 
-          format: null 
+          format: null,
+          mobile: 2
         },
         {
           key: 'visibility',
           title: 'Synlighet',
           type: 'select',
           options: ['Synlig', 'Dold'], 
-          format: null 
+          format: null,
+          mobile: 4
         },
         {
           key: 'ticket',
           title: 'Bongplats',
           type: 'select', 
           options: ['Bar', 'Kök'], 
-          format: null 
+          format: null,
+          mobile: 3
         },
         {
           key: 'created_at',
@@ -66,21 +69,19 @@ export default function Categories(){
       };
     
       const goToAdd = () => {
+    
         push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Ny kategori"})
       }
       
 
     return(
       <>
-      <div style={{display: "flex", padding: "10px"}}>
-        <button  className="hoverable" onClick={goToAdd}>Skapa ny</button>
-        <SearchBar/>
-      </div>
           <ItemTable
         fields={fields}
         data={tableData}
         onSave={handleSave}
         onDelete={handleDelete}
+        onAdd={goToAdd}
       />
     </>
     )

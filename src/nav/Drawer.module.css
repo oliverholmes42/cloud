@@ -7,7 +7,6 @@
     flex-direction: column;
     padding: 20px; /* Padding around the drawer */
     max-width: 600px; /* Set a maximum width to avoid being too wide */
-    background-color: #f8f8f8; /* Light background color */
     border-radius: 10px; /* Rounded corners for the drawer */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     color: #333; /* Base text color */

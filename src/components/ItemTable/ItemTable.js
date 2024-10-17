@@ -5,11 +5,13 @@ import SearchBar from '../SearchBar/SearchBar';
 import FloatingButton from '../FloatingButton/FloatingButton';
 import { useStack } from '../../StackContext';
 import EditItem from '../../stackPages/EditItem';
+import AddItem from '../../stackPages/AddItem';
 
 // Custom table component
-export default function ItemTable({ fields, data, onSave, onDelete }) {
+export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
   const [selectedRow, setSelectedRow] = useState(null); // State to track the selected row
   const {push} = useStack();
+  const [filteredData, setFilteredData] = useState(data);
 
   const mobileFields = fields
     .filter(field => field.mobile)
@@ -42,14 +44,32 @@ export default function ItemTable({ fields, data, onSave, onDelete }) {
 
   const EditInMobile = (item) => {
     const page = <EditItem data={item} fields={fields} onSave={onSave} onDelete={onDelete}/>;
-    push({page, title:"Test"})
+    push({page, title:"Redigera"})
+  }
+  const goToAdd = () => {
+    push({page: <AddItem fields={fields} onCreate={onAdd}/>, title: "Lägg Till Ny"})
   }
 
+  const search = (query) => {
+    if(query.length > 1){
+    setFilteredData((prevData) => {
+      // Filter the previous data based on the query
+      return prevData.filter(item =>
+        // Adjust this condition based on what property you want to search
+        item.name.toLowerCase().includes(query.toLowerCase())
+      );
+    });}
+    else{
+      setFilteredData(data);
+    }
+  };
+  
+
   return (<>
-  <div style={{display: "flex", padding: "10px"}}>
-        <button  className="hoverable desktop" onClick={()=>{console.log("ello")}}>Skapa ny</button>
-        <FloatingButton className="mobile" text="Lägg till Ny"/>
-        <SearchBar/>
+  <div style={{display: "flex", padding: "10px", justifyContent: "space-between"}}>
+        <button  className="hoverable desktop" onClick={goToAdd}>Skapa ny</button>
+        <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd}/>
+        <SearchBar onSearch={search}/>
       </div>
     <table className={`${styles.table} desktop`} cellPadding="10" cellSpacing="0">
       <thead>
@@ -62,7 +82,7 @@ export default function ItemTable({ fields, data, onSave, onDelete }) {
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
+        {filteredData.map((item, index) => (
           index === selectedRow ? (
             <EditTableRow
               key={item.id}
@@ -94,7 +114,7 @@ export default function ItemTable({ fields, data, onSave, onDelete }) {
       </tbody>
     </table>
     <div className='mobile'>
-      {data.map((item, fieldIndex) => (
+      {filteredData.map((item, fieldIndex) => (
         <div key={fieldIndex} className={`${styles.mobileItem} block`} onClick={()=>EditInMobile(item)}>
           {/* Render the fields in two columns */}
             <div className={styles.mobileColumn}>

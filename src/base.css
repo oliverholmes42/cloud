@@ -1,10 +1,10 @@
 :root{
-    --white: #FDFDFF;
+    --white: #F6F6F8;
     --black: #090809;
     --accent: #CFC8D8;
     --darkAccent: #484053;
 
-    --block: #F6F6F8;
+    --block: #FDFDFF;
     --darkBlock: #EEEEF0;
 
     background-color: var(--white);
@@ -89,7 +89,7 @@ input, select {
     font-size: 1rem; /* Match the font size with table data */
     border: 2px solid var(--darkBlock); /* Add a border for better visibility */
     border-radius: 7px; /* Small border-radius for input fields */
-    background-color: var(--white); /* Keep input background consistent */
+    background-color: var(--block); /* Keep input background consistent */
     margin: 2px;
 }
 

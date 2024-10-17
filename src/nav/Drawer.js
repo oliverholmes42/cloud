@@ -8,7 +8,7 @@ export default function Drawer({ routes }) {
   return (
     <nav className={styles.drawer}>
       {routes.map((list, listIndex) => (
-        <div key={listIndex} className={styles.block}>
+        <div key={listIndex} className={`block ${styles.block}`}>
           {list.map((item, itemIndex) => {
             // Check if 'page' property exists to determine item type
             const isGroupTitle = !item.page;

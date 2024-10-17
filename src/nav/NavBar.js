@@ -9,7 +9,7 @@ import { useStack } from "../StackContext";
 import InvoicePage from "../navPages/InvoicePage";
 import IntegrationPage from "../navPages/IntegrationPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faBoxesStacked, faCashRegister, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBoxesStacked, faCashRegister, faChevronLeft, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
 import PlaceholderPage from "../stackPages/PlaceholderPage";
 import HardWarePage from "../navPages/HardWarePage";
 
@@ -44,7 +44,7 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
         setActive(page);
     }
 
-    const {logout} = useContext(AuthContext);
+    const {logout, removeLocation} = useContext(AuthContext);
 
     useEffect(() => {
         setActive(items[0][0].page); // Set first item from first section as default
@@ -75,7 +75,7 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
                     ))}
                 </div>
             ))}
-            <button className={`hoverable ${styles.Logout}`} onClick={logout}>Logga ut <FontAwesomeIcon icon={faRightFromBracket} /> </button>
+            <button className={`hoverable ${styles.Logout}`} onClick={removeLocation}><FontAwesomeIcon icon={faChevronLeft} /> Byt säljställe </button>
             </>
         )
     }

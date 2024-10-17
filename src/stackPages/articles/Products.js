@@ -44,6 +44,7 @@ export default function Products() {
         data={tableData}
         onSave={handleSave}
         onDelete={handleDelete}
+        onAdd={handleAdd}
       />
     </>
   );

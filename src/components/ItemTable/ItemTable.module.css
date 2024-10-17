@@ -1,7 +1,7 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--white);
+    background-color: var(--block);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden; /* Ensures rounded corners are visible */
@@ -43,7 +43,7 @@
 
 
 .oddRow{
-    background-color: var(--white);
+    background-color: var(--darkBlock);
 }
 
 

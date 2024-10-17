@@ -5,6 +5,7 @@ import './base.css';
 import { Toaster } from 'react-hot-toast';
 import LoginPage from "./login/LoginPage";
 import Main from "./Main";
+import LocationPage from "./login/LocationPage";
 
 function App() {
   // Move this inside the AuthProvider
@@ -17,9 +18,14 @@ function App() {
 }
 
 function AuthContent() {
-  const { user } = useContext(AuthContext); // Get user data from AuthContext
+  const { user, location } = useContext(AuthContext); // Get user data from AuthContext
   
-  return user ? <Main /> : <LoginPage />;
+  return user 
+  ? location 
+    ? <Main /> 
+    : <LocationPage />
+  : <LoginPage />;
+
 }
 
 export default App;
