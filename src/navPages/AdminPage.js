@@ -5,8 +5,7 @@ export default function AdminPage(){
     const items = [
         [
             {title:"Servis"},
-            {title:"", page: temp},
-            {title: }
+            {title:"", page: temp}
         ]
     ]
 }

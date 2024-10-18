@@ -1,18 +1,22 @@
-[
-    { "hour": "12:00", "sales": 100 },
-    { "hour": "13:00", "sales": 150 },
-    { "hour": "14:00", "sales": 200 },
-    { "hour": "15:00", "sales": 250 },
-    { "hour": "16:00", "sales": 300 },
-    { "hour": "17:00", "sales": 400 },
-    { "hour": "18:00", "sales": 600 },
-    { "hour": "19:00", "sales": 750 },
-    { "hour": "20:00", "sales": 900 },
-    { "hour": "21:00", "sales": 1100 },
-    { "hour": "22:00", "sales": 1200 },
-    { "hour": "23:00", "sales": 1300 },
-    { "hour": "00:00", "sales": 1000 },
-    { "hour": "01:00", "sales": 600 },
-    { "hour": "02:00", "sales": 400 }
+[ 
+  [
+    { "day": "mon", "sales": 750 },
+    { "day": "tue", "sales": 900 },
+    { "day": "wed", "sales": 1000 },
+    { "day": "thu", "sales": 950 },
+    { "day": "fri", "sales": 1200 },
+    { "day": "sat", "sales": 1000 },
+    { "day": "sun", "sales": 700 }
+  ],
+  [
+    { "day": "mon", "sales": 720 }, 
+    { "day": "tue", "sales": 860 },
+    { "day": "wed", "sales": 1050 },
+    { "day": "thu", "sales": 920 }
   ]
+  
+  
+  
+]
+
   
