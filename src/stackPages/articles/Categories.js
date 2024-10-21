@@ -42,11 +42,6 @@ export default function Categories(){
       const handleAdd = (newItem) => {
         console.log(newItem)
       };
-    
-      const goToAdd = () => {
-    
-        push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Ny kategori"})
-      }
       
 
     return(
@@ -56,7 +51,7 @@ export default function Categories(){
         data={tableData}
         onSave={handleSave}
         onDelete={handleDelete}
-        onAdd={goToAdd}
+        onAdd={handleAdd}
       />
     </>
     )

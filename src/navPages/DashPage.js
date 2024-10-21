@@ -20,7 +20,7 @@ export default function Dash() {
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
         
         {/* BarChart with both sales sets */}
-        <ResponsiveContainer width="30%" height={200}>
+        <ResponsiveContainer width={300} height={200}>
           <BarChart data={mergedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
@@ -33,7 +33,7 @@ export default function Dash() {
         </ResponsiveContainer>
 
         {/* AreaChart with transparency */}
-        <ResponsiveContainer width="30%" height={200}>
+        <ResponsiveContainer width={300} height={200}>
           <AreaChart data={mergedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
@@ -60,7 +60,7 @@ export default function Dash() {
         </ResponsiveContainer>
 
         {/* Gain/Loss BarChart */}
-        <ResponsiveContainer width="30%" height={200}>
+        <ResponsiveContainer width={300} height={200}>
           <BarChart data={mergedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />

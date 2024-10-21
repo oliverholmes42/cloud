@@ -30,10 +30,12 @@ export default function AddItem({ fields, onCreate }) {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add any additional validation if needed
-    onCreate(formData); // Pass the new item data to the parent or backend
-    pop(); // Close the modal or go back to the previous state
-    // Reset form after submission
+
+    console.log("ello")
+
+    onCreate(formData);
+    pop();
+
     setFormData(
       fields.reduce((acc, field) => {
         if (field.type === "select" && field.format?.multiple) {

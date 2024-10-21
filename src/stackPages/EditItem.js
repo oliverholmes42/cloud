@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useStack } from '../StackContext';
+import DropDown from '../components/dropdown/DropDown'; // Assuming DropDown is in the same directory
 
 // EditForm Component
 export default function EditItem({ data, fields, onSave, onDelete }) {
@@ -14,22 +15,10 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
     }
   }, [ref]);
 
-  const handleInputChange = (e, field) => {
-    let value = e.target.value;
-
-    // Parse the value based on field type
-    if (field.type === 'number') {
-      value = parseFloat(value) || 0; // Convert to float, handle empty or invalid input
-    }
-
-    if (field.type === 'select') {
-      value = e.target.value; // Select value stays as string
-    }
-
-    // Update formData with parsed value
+  const handleInputChange = (key, value) => {
     setFormData({
       ...formData,
-      [field.key]: value,
+      [key]: value,
     });
   };
 
@@ -52,17 +41,13 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
       }
     };
 
-    if (field.type === 'read') {
-      return null; // Do not render anything for read-only fields
-    }
-
     switch (field.type) {
       case 'text':
         return (
           <input
             type="text"
             value={value}
-            onChange={(e) => handleInputChange(e, field)}
+            onChange={(e) => handleInputChange(field.key, e.target.value)}
             ref={index === 0 ? ref : null} // Focus on the first input field
             onKeyDown={handleKeyDown}
           />
@@ -72,14 +57,31 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
           <input
             type="number"
             value={value}
-            onChange={(e) => handleInputChange(e, field)}
+            onChange={(e) => handleInputChange(field.key, e.target.value)}
             ref={index === 0 ? ref : null}
             onKeyDown={handleKeyDown}
           />
         );
       case 'select':
+        // If the select field has `format.multiple` set to true, use DropDown component
+        if (field.format?.multiple) {
+          return (
+            <DropDown
+              options={field.options} // Pass the options for the dropdown
+              value={value} // Pass the current value as an array of selected ids
+              name={field.key} // Use the field key as the name
+              onChange={handleInputChange} // Handle changes
+            />
+          );
+        }
+
+        // Use native select dropdown for single select
         return (
-          <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
+          <select
+            value={value}
+            onChange={(e) => handleInputChange(field.key, e.target.value)}
+            onKeyDown={handleKeyDown}
+          >
             {field.options.map((option, index) => (
               <option key={index} value={option}>
                 {option}
@@ -92,7 +94,7 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
           <input
             type="text"
             value={value}
-            onChange={(e) => handleInputChange(e, field)}
+            onChange={(e) => handleInputChange(field.key, e.target.value)}
             ref={index === 0 ? ref : null}
             onKeyDown={handleKeyDown}
           />

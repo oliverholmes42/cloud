@@ -34,9 +34,6 @@ export default function Products() {
     console.log(newItem)
   };
 
-  const goToAdd = () => {
-    push({page: <AddItem fields={fields} onCreate={handleAdd}/>, title: "Ny produkt"})
-  }
 
   return (<>
       <ItemTable
