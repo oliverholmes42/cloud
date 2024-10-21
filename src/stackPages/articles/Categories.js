@@ -3,7 +3,7 @@ import data from '../../data/categories.json';
 import ItemTable from '../../components/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
 import AddItem from '../AddItem';
-import SearchBar from '../../components/SearchBar/SearchBar';
+import ticketScreens from '../../data/ticketScreens.json';
 
 export default function Categories(){
     const [tableData, setTableData] = useState(data);
@@ -11,35 +11,10 @@ export default function Categories(){
 
     const fields = [
         {key: 'name',title: 'Namn',type: 'text', format: null, mobile: 1 },
-        {key: 'tax',
-          title: 'Moms',
-          type: 'number', 
-          format: { type: 'percentage', decimals: 2 } 
-        },
-        {
-          key: 'type',
-          title: 'Typ',
-          type: 'select', 
-          options: ['Dryck', 'Mat'], 
-          format: null,
-          mobile: 2
-        },
-        {
-          key: 'visibility',
-          title: 'Synlighet',
-          type: 'select',
-          options: ['Synlig', 'Dold'], 
-          format: null,
-          mobile: 4
-        },
-        {
-          key: 'ticket',
-          title: 'Bongplats',
-          type: 'select', 
-          options: ['Bar', 'Kök'], 
-          format: null,
-          mobile: 3
-        },
+        {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 } },
+        {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'], format: null, mobile: 2 },
+        {key: 'visibility', title: 'Synlighet',type: 'select',options: ['Synlig', 'Dold'], format: 'select', mobile: 4},
+        {key: 'ticket',title: 'Bongplats',type: 'select', options: ticketScreens, format: {type: 'select', multiple: true},mobile: 3},
         {
           key: 'created_at',
           title: 'Skapades',

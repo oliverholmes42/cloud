@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import Select from 'react-select/base';
+import DropDown from '../components/dropdown/DropDown';
 
 // EditTableRow Component
 export default function EditTableRow({ item, fields, onSave, onDelete }) {
@@ -11,6 +13,10 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
       ref.current.select();
     }
   }, [ref]);
+
+  useEffect(()=>{
+    console.log(formData)
+  },[formData])
 
   const handleInputChange = (e, field) => {
     let value = e.target.value;
@@ -30,6 +36,13 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
       [field.key]: value,
     });
   };
+
+  const handleMultiChange = (name, value) => {
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
 
   const save = () => {
     toast.success('Item saved');
@@ -74,16 +87,29 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
             onKeyDown={handleKeyDown}
           />
         );
-      case 'select':
-        return (
-          <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
-            {field.options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        );
+        case 'select':
+          const format = field.format;
+          const multiple = (format && format.multiple) || false;
+        
+          if (multiple) {
+            return (
+              <DropDown options={field.options} onChange={handleMultiChange} value={value} name={"ticket"}/>
+            );
+          } else {
+            return (
+              <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
+                {field.options.map((option, index) => {
+                  const value = option.id || option.value || option;
+                  const name = option.name || option.title || option;
+                  return (
+                    <option key={index} value={value}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </select>
+            );
+          }
       default:
         return (
           <input

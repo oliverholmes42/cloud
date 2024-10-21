@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { useStack } from "../StackContext";
+import DropDown from '../components/dropdown/DropDown'
 
-export default function AddItem({fields, onCreate}) {
+export default function AddItem({ fields, onCreate }) {
   const { pop } = useStack();
-  
+
   // Initialize state for form data
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => {
-      acc[field.key] = field.type === 'select' ? field.options[0] : ''; // Set default values based on field type
+      if (field.type === "select" && field.format?.multiple) {
+        acc[field.key] = []; // Default value for multi-select dropdown is an empty array
+      } else if (field.type === "select") {
+        acc[field.key] = field.options[0]; // Default value for single-select
+      } else {
+        acc[field.key] = ""; // Default value for other types
+      }
       return acc;
     }, {})
   );
@@ -25,44 +32,68 @@ export default function AddItem({fields, onCreate}) {
     e.preventDefault();
     // Add any additional validation if needed
     onCreate(formData); // Pass the new item data to the parent or backend
-    pop();
-    setFormData(fields.reduce((acc, field) => {
-      acc[field.key] = field.type === 'select' ? field.options[0] : ''; // Reset form after submission
-      return acc;
-    }, {}));
+    pop(); // Close the modal or go back to the previous state
+    // Reset form after submission
+    setFormData(
+      fields.reduce((acc, field) => {
+        if (field.type === "select" && field.format?.multiple) {
+          acc[field.key] = []; // Reset multi-select dropdown
+        } else if (field.type === "select") {
+          acc[field.key] = field.options[0]; // Reset single-select
+        } else {
+          acc[field.key] = ""; // Reset other types
+        }
+        return acc;
+      }, {})
+    );
   };
 
   return (
     <form onSubmit={handleSubmit}>
       {fields.map((field) => (
-        field.type !== 'read' && ( // Don't render anything if the field type is 'read'
+        field.type !== "read" && (
           <div key={field.key}>
             <label>{field.title}</label>
-            {field.type === 'text' && (
+
+            {/* Render input fields based on the field type */}
+            {field.type === "text" && (
               <input
                 type="text"
                 value={formData[field.key]}
                 onChange={(e) => handleInputChange(field.key, e.target.value)}
               />
             )}
-            {field.type === 'number' && (
+
+            {field.type === "number" && (
               <input
                 type="number"
                 value={formData[field.key]}
                 onChange={(e) => handleInputChange(field.key, e.target.value)}
               />
             )}
-            {field.type === 'select' && (
+
+            {/* Handle single select */}
+            {field.type === "select" && !field.format?.multiple && (
               <select
                 value={formData[field.key]}
                 onChange={(e) => handleInputChange(field.key, e.target.value)}
               >
                 {field.options.map((option, index) => (
                   <option key={index} value={option}>
-                    {option === true ? 'Yes' : option === false ? 'No' : option}
+                    {option === true ? "Yes" : option === false ? "No" : option}
                   </option>
                 ))}
               </select>
+            )}
+
+            {/* Handle multi-select using DropDown */}
+            {field.type === "select" && field.format?.multiple && (
+              <DropDown
+                options={field.options}
+                value={formData[field.key]}
+                name={field.key}
+                onChange={handleInputChange}
+              />
             )}
           </div>
         )
@@ -71,4 +102,3 @@ export default function AddItem({fields, onCreate}) {
     </form>
   );
 }
-

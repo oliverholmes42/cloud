@@ -1,0 +1,75 @@
+[
+    {
+      "id": 1,
+      "name": "Kök 1",
+      "visible": true,
+      "ip": "192.168.1.10",
+      "status": "Online",
+      "created_at": "2023-05-20T10:00:00Z",
+      "updated_at": "2024-10-15T08:30:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Bar 1",
+      "visible": true,
+      "ip": "192.168.1.11",
+      "status": "Online",
+      "created_at": "2023-05-21T11:15:00Z",
+      "updated_at": "2024-10-16T09:15:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Kök 2",
+      "visible": true,
+      "ip": "192.168.1.12",
+      "status": "Online",
+      "created_at": "2023-05-22T09:30:00Z",
+      "updated_at": "2024-10-17T07:45:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Bar 2",
+      "visible": true,
+      "ip": "192.168.1.13",
+      "status": "Online",
+      "created_at": "2023-05-23T12:45:00Z",
+      "updated_at": "2024-10-18T10:20:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Kitchen Screen 3",
+      "visible": true,
+      "ip": "192.168.1.14",
+      "status": "Online",
+      "created_at": "2023-05-24T08:20:00Z",
+      "updated_at": "2024-10-19T08:00:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Bar Screen 3",
+      "visible": true,
+      "ip": "192.168.1.15",
+      "status": "Online",
+      "created_at": "2023-05-25T14:10:00Z",
+      "updated_at": "2024-10-20T11:05:00Z"
+    },
+    {
+      "id": 7,
+      "name": "Kitchen Screen 4",
+      "visible": true,
+      "ip": "192.168.1.16",
+      "status": "Online",
+      "created_at": "2023-05-26T07:50:00Z",
+      "updated_at": "2024-10-20T07:30:00Z"
+    },
+    {
+      "id": 8,
+      "name": "Bar Screen 4",
+      "visible": true,
+      "ip": "192.168.1.17",
+      "status": "Online",
+      "created_at": "2023-05-27T16:30:00Z",
+      "updated_at": "2024-10-20T12:00:00Z"
+    }
+  ]
+  

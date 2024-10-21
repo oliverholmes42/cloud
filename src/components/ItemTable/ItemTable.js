@@ -18,7 +18,8 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
     .sort((a, b) => a.mobile - b.mobile);
 
   // Format the value based on the provided format
-  const formatValue = (value, format) => {
+  const formatValue = (value, field) => {
+    const format = field && field.format;
     if (!format) return value;
 
     // Handle number formatting with decimals, prefix, and suffix
@@ -39,6 +40,28 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
       return dateValue.toLocaleDateString(format.locale || 'en-US', format.options || {});
     }
 
+    if (format.type === 'select') {
+      // Handle single number case
+      if (typeof value === 'number') {
+        const formattedValue = field.options.find(item => item.id === value);
+        return formattedValue ? formattedValue.name : 'Unknown';  // Return name or fallback if not found
+      }
+      
+      // Handle array case
+      if (Array.isArray(value) && value.length > 0) {
+        const firstItem = field.options.find(item => item.id === value[0]);
+        
+        if (!firstItem) {
+          return 'Inga';  // If first item not found, return default "Inga"
+        }
+        
+        const valuesLeft = value.length - 1;
+        return valuesLeft > 0 ? `${firstItem.name} +${valuesLeft}` : firstItem.name;
+      }
+      
+      return 'Inga';  // Return default if the array is empty or not an array
+    }
+    
     return value; // Default return if no formatting applies
   };
 
@@ -105,7 +128,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
             >
               {fields.map((field, fieldIndex) => (
                 <td key={fieldIndex} className={styles.td}>
-                  {formatValue(item[field.key], field.format)}
+                  {formatValue(item[field.key], field)}
                 </td>
               ))}
             </tr>

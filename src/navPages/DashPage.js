@@ -1,6 +1,8 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Cell } from "recharts";
 import sales from '../data/sales.json'; // Assuming your sales data is here
+import Select from 'react-select/base';
+import tickets from '../data/ticketScreens.json'
 
 export default function Dash() {
   const mergedData = sales[0].map((item, index) => ({
@@ -74,7 +76,7 @@ export default function Dash() {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-
+        
       </div>
     </>
   );
