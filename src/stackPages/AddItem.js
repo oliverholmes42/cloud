@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useStack } from "../StackContext";
 import DropDown from '../components/dropdown/DropDown'
+import toast from "react-hot-toast";
 
 export default function AddItem({ fields, onCreate }) {
   const { pop } = useStack();
@@ -30,9 +31,7 @@ export default function AddItem({ fields, onCreate }) {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log("ello")
-
+    toast.success("Artikel tillagd")
     onCreate(formData);
     pop();
 

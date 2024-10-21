@@ -23,14 +23,15 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
   };
 
   const save = () => {
-    toast.success('Item saved');
+    toast.success('Ändringarna sparades');
     onSave(formData); // Trigger save callback with updated data
     pop();
   };
 
   const remove = () => {
-    toast.success('Item deleted');
-    onDelete(data.id); // Trigger delete callback
+    toast.success('Arikel borttagen');
+    onDelete(data.id);
+    pop();
   };
 
   // Custom input rendering function
