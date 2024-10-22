@@ -4,7 +4,7 @@ import Select from 'react-select/base';
 import DropDown from '../components/dropdown/DropDown';
 
 // EditTableRow Component
-export default function EditTableRow({ item, fields, onSave, onDelete }) {
+export default function EditTableRow({ item, fields, onSave, onDelete, onEdit }) {
   const [formData, setFormData] = useState(item);
   const ref = useRef(null);
 
@@ -93,7 +93,7 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
         
           if (multiple) {
             return (
-              <DropDown options={field.options} onChange={handleMultiChange} value={value} name={"ticket"}/>
+              <DropDown options={field.options} onChange={handleMultiChange} value={value} name={"ticket"} onSave={save}/>
             );
           } else {
             return (
@@ -128,7 +128,7 @@ export default function EditTableRow({ item, fields, onSave, onDelete }) {
       {fields.map((field, index) => (
         <td key={index}>
           {index === fields.length - 2 ? (
-            <button className='hoverable' onClick={save}>Save</button>
+            <button className='hoverable' onClick={onEdit}>Redigera</button>
           ) : index === fields.length - 1 ? (
             <button className='hoverable delete' onClick={remove}>Radera</button>
           ) : (

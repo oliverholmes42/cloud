@@ -1,0 +1,35 @@
+[
+    {
+      "id": 0,
+      "name": "Momsfritt",
+      "moms": 0,
+      "account": "",
+      "updated_at": "2024-01-04T13:00:00Z",
+      "created_at": "2024-01-04T13:00:00Z"
+    },
+    {
+      "id": 1,
+      "name": "Moms 25%",
+      "moms": 0.25,
+      "account": "2611",
+      "updated_at": "2024-10-22T00:00:00Z",
+      "created_at": "2024-10-22T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Moms 12%",
+      "moms": 0.12,
+      "account": "2621",
+      "updated_at": "2024-10-22T00:00:00Z",
+      "created_at": "2024-10-22T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Moms 6%",
+      "moms": 0.06,
+      "account": "2631",
+      "updated_at": "2024-10-22T00:00:00Z",
+      "created_at": "2024-10-22T00:00:00Z"
+    }
+  ]
+  

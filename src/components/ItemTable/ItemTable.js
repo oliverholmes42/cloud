@@ -119,6 +119,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
                 onDelete(id);
                 setSelectedRow(null); // Exit edit mode after deleting
               }}
+              onEdit={()=>EditInMobile(item)}
             />
           ) : (
             <tr
@@ -146,9 +147,9 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
                 .filter(field => field.mobile <= 3)
                 .map((field) => (
                   <div key={field.key}>
-                    {field.mobile === 1 && <h3>{formatValue(item[field.key], field.format)}</h3>}
-                    {field.mobile === 2 && <h4 style={{color: "var(--darkAccent)"}}>{formatValue(item[field.key], field.format)}</h4>}
-                    {field.mobile === 3 && <h5>{formatValue(item[field.key], field.format)}</h5>}
+                    {field.mobile === 1 && <h3>{formatValue(item[field.key], field)}</h3>}
+                    {field.mobile === 2 && <h4 style={{color: "var(--darkAccent)"}}>{formatValue(item[field.key], field)}</h4>}
+                    {field.mobile === 3 && <h5>{formatValue(item[field.key], field)}</h5>}
                   </div>
                 ))}
             </div>
@@ -158,8 +159,8 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
                 .filter(field => field.mobile > 3)
                 .map((field) => (
                   <div key={field.key}>
-                    {field.mobile === 4 && <h3>{formatValue(item[field.key], field.format)}</h3>}
-                    {field.mobile === 5 && <h5>{formatValue(item[field.key], field.format)}</h5>}
+                    {field.mobile === 4 && <h3>{formatValue(item[field.key], field)}</h3>}
+                    {field.mobile === 5 && <h5>{formatValue(item[field.key], field)}</h5>}
                   </div>
                 ))}
             </div>

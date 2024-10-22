@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-const DropDown = ({ options, value, onChange, name }) => {
+const DropDown = ({ options, value, onChange, name, onSave }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   // Map your list of objects to match the `react-select` format (value and label)
@@ -55,6 +55,10 @@ const DropDown = ({ options, value, onChange, name }) => {
         onChange={handleSelectChange}
         options={formattedOptions}
         placeholder=""
+        onKeyDown={(e)=>{
+            if (e.key === 'Enter') {
+            onSave();
+          }}}
       />
     </div>
   );
