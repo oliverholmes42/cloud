@@ -3,7 +3,7 @@ import data from '../../data/products.json';
 import ItemTable from '../../components/ItemTable/ItemTable';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { useStack } from '../../StackContext';
-import AddItem from '../AddItem';
+import AddItem from '../ItemForm/ItemForm';
 
 export default function Products() {
   const [tableData, setTableData] = useState(data); // Manage the table data for editing
@@ -18,7 +18,7 @@ export default function Products() {
     { key: 'alcohol_content', title: 'Alkoholhalt', type: 'number', format: { type: 'percentage'}, advanced: "Product Info" }, 
     { key: 'sku', title: 'SKU', type: 'text', advanced: 'Product Info' },  // Advanced: Product Info
     { key: 'cost_price', title: 'Inköpspris', type: 'number', format: { type: 'number', suffix: ' kr' }, advanced: 'Pricing Info' },  // Advanced: Pricing Info
-    { key: 'in_stock', title: 'I Lager', type: 'boolean', advanced: 'Pricing Info' },  // Advanced: Stock Info
+    { key: 'in_stock', title: 'I Lager', type: 'select', options: ["Ja", "Nej"], advanced: 'Pricing Info' },  // Advanced: Stock Info
     { key: 'created_at', title: 'Created At', type: 'read', format: { type: 'date', locale: 'sv-SE', options: { year: 'numeric', month: 'long', day: 'numeric' } } },
     { key: 'updated_at', title: 'Updated At', type: 'read', format: { type: 'date', locale: 'sv-SE' } }, 
   ];

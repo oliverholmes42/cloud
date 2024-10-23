@@ -4,8 +4,7 @@ import styles from './ItemTable.module.css'; // Use your provided module.css
 import SearchBar from '../SearchBar/SearchBar';
 import FloatingButton from '../FloatingButton/FloatingButton';
 import { useStack } from '../../StackContext';
-import EditItem from '../../stackPages/EditItem';
-import AddItem from '../../stackPages/AddItem';
+import ItemForm from '../../stackPages/ItemForm/ItemForm';
 
 // Custom table component
 export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
@@ -66,13 +65,29 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
   };
 
   const EditInMobile = (item) => {
-    const page = <EditItem data={item} fields={fields} onSave={onSave} onDelete={onDelete}/>;
-    push({page, title:"Redigera"})
+    const page = (
+      <ItemForm 
+        initialData={item}   // Pass the item data for editing
+        fields={fields} 
+        onSubmit={onSave}    // Use onSave for editing
+        isEditMode={true}    // Set edit mode to true
+        onDelete={onDelete}  // Pass the delete function
+      />
+    );
+    push({ page, title: "Redigera" });
   }
+  
   const goToAdd = () => {
-    push({page: <AddItem fields={fields} onCreate={onAdd}/>, title: "Lägg Till Ny"})
+    const page = (
+      <ItemForm
+        fields={fields} 
+        onSubmit={onAdd}    // Use onAdd for creating a new item
+        isEditMode={false}  // Set edit mode to false for adding
+      />
+    );
+    push({ page, title: "Lägg Till Ny" });
   }
-
+  
   const search = (query) => {
     if(query.length > 1){
     setFilteredData((prevData) => {

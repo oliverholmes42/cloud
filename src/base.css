@@ -1,12 +1,11 @@
 :root{
-    --white: #F6F6F8;
-    --black: #090809;
-    --accent: #CFC8D8;
-    --darkAccent: #484053;
+    --white: #EBEBF0;
+--black: #2B2B2E;
+--accent: #88C0D0; /* Soft Teal */
+--darkAccent: #4B4B50;
 
-    --block: #FDFDFF;
-    --darkBlock: #EEEEF0;
-
+--block: #F1F1F4;
+--darkBlock: #C2C2C8;
     background-color: var(--white);
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import data from '../../data/categories.json';
 import ItemTable from '../../components/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
-import AddItem from '../AddItem';
+import AddItem from '../ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
 
 export default function Categories(){
@@ -10,7 +10,7 @@ export default function Categories(){
     const {push} = useStack();
 
     const fields = [
-        {key: 'name',title: 'Namn', mobile: 1 },
+        {key: 'name',title: 'Namn', type: 'text', mobile: 1 },
         {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 } },
         {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'],mobile: 2 },
         {key: 'visibility', title: 'Synlighet',type: 'select',options: ['Synlig', 'Dold'], format: 'select', mobile: 4},
