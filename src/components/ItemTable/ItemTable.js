@@ -98,9 +98,10 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
       <thead>
         <tr>
           {fields.map((field, index) => (
+            !field.advanced &&(
             <th key={index} className={styles.th}>
               {field.title.toUpperCase()}
-            </th>
+            </th>)
           ))}
         </tr>
       </thead>
@@ -128,6 +129,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
               className={index % 2 === 0 ? '' : styles.oddRow}
             >
               {fields.map((field, fieldIndex) => (
+                !field.advanced&&
                 <td key={fieldIndex} className={styles.td}>
                   {formatValue(item[field.key], field)}
                 </td>

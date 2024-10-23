@@ -6,6 +6,7 @@ import DropDown from '../components/dropdown/DropDown'; // Assuming DropDown is 
 // EditForm Component
 export default function EditItem({ data, fields, onSave, onDelete }) {
   const [formData, setFormData] = useState(data);
+  const [expandedSection, setExpandedSection] = useState(null); // Tracks the currently expanded section
   const ref = useRef(null);
   const { pop } = useStack();
 
@@ -29,9 +30,14 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
   };
 
   const remove = () => {
-    toast.success('Arikel borttagen');
+    toast.success('Artikel borttagen');
     onDelete(data.id);
     pop();
+  };
+
+  const toggleSection = (sectionName) => {
+    // If the clicked section is already expanded, collapse it. Otherwise, expand the clicked one and collapse the others.
+    setExpandedSection((prev) => (prev === sectionName ? null : sectionName));
   };
 
   // Custom input rendering function
@@ -103,24 +109,58 @@ export default function EditItem({ data, fields, onSave, onDelete }) {
     }
   };
 
+  // Group fields into "basic" and "advanced"
+  const basicFields = fields.filter((field) => !field.advanced);
+  const advancedSections = fields
+    .filter((field) => field.advanced)
+    .reduce((sections, field) => {
+      if (!sections[field.advanced]) {
+        sections[field.advanced] = [];
+      }
+      sections[field.advanced].push(field);
+      return sections;
+    }, {});
+
   return (
-    <form className="edit-form">
-      {fields
-        .filter((field) => field.type !== 'read') // Filter out read-only fields
-        .map((field, index) => (
+    <div className="edit-form-wrapper">
+      <form className="edit-form">
+        {/* Basic Fields */}
+        <h2>Basic Information</h2>
+        {basicFields.map((field, index) => (
           <div key={index} className="form-group">
             <label htmlFor={field.key}>{field.title}</label>
             {renderInput(field, formData[field.key], index)}
           </div>
         ))}
-      <div className="form-actions">
-        <button type="button" className="hoverable" onClick={save}>
-          Save
-        </button>
-        <button type="button" className="hoverable delete" onClick={remove}>
-          Delete
-        </button>
-      </div>
-    </form>
+        {/* Save/Delete Buttons */}
+        <div className="form-actions">
+          <button type="button" className="hoverable" onClick={save}>
+            Save
+          </button>
+          <button type="button" className="hoverable delete" onClick={remove}>
+            Delete
+          </button>
+        </div>
+      </form>
+
+      {/* Advanced Fields */}
+      {Object.keys(advancedSections).map((sectionName, sectionIndex) => (
+        <div key={sectionIndex} className="advanced-section">
+          <h2 onClick={() => toggleSection(sectionName)} style={{ cursor: 'pointer' }}>
+            {sectionName} {expandedSection === sectionName ? '-' : '+'}
+          </h2>
+          {expandedSection === sectionName && (
+            <form className="edit-form">
+              {advancedSections[sectionName].map((field, index) => (
+                <div key={index} className="form-group">
+                  <label htmlFor={field.key}>{field.title}</label>
+                  {renderInput(field, formData[field.key], index)}
+                </div>
+              ))}
+            </form>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }

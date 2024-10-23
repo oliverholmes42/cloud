@@ -28,8 +28,8 @@ const DropDown = ({ options, value, onChange, name, onSave }) => {
     control: (provided) => ({
       ...provided,
       fontSize: '16px', // Increase font size for selected option
-      width: '300px',   // Set a fixed width, or you can use maxWidth
-      // maxWidth: '100%', // Or you can use maxWidth for responsiveness
+      width: 'auto',   // Set a fixed width, or you can use maxWidth
+      maxWidth: '300px', // Or you can use maxWidth for responsiveness
     }),
     menu: (provided) => ({
       ...provided,

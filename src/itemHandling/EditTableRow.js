@@ -126,9 +126,10 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
   return (
     <tr>
       {fields.map((field, index) => (
+        !field.advanced&&
         <td key={index}>
           {index === fields.length - 2 ? (
-            <button className='hoverable' onClick={onEdit}>Redigera</button>
+            <button className='hoverable' onClick={onEdit}>Inställningar</button>
           ) : index === fields.length - 1 ? (
             <button className='hoverable delete' onClick={remove}>Radera</button>
           ) : (

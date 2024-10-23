@@ -10,9 +10,9 @@ export default function Categories(){
     const {push} = useStack();
 
     const fields = [
-        {key: 'name',title: 'Namn',type: 'text', format: null, mobile: 1 },
+        {key: 'name',title: 'Namn', mobile: 1 },
         {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 } },
-        {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'], format: null, mobile: 2 },
+        {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'],mobile: 2 },
         {key: 'visibility', title: 'Synlighet',type: 'select',options: ['Synlig', 'Dold'], format: 'select', mobile: 4},
         {key: 'ticket',title: 'Bongplats',type: 'select', options: ticketScreens, format: {type: 'select', multiple: true},mobile: 3},
         {
