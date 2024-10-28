@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBoxesStacked, faCashRegister, faChevronLeft, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
 import PlaceholderPage from "../stackPages/PlaceholderPage";
 import HardWarePage from "../navPages/HardWarePage";
+import AdminPage from "../navPages/AdminPage";
 
 export const routes = [
     [
@@ -25,7 +26,7 @@ export const routes = [
         
     ],
     [
-        {title: "Administration", page: <PlaceholderPage/>, icon: faUserTie },
+        {title: "Administration", page: <AdminPage/>, icon: faUserTie },
         { title: "Integration", page: <IntegrationPage />, icon: faPlug }
     ],
     [{ title: "Inställningar", page: <Settings />, icon: faGears }]
