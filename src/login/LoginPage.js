@@ -59,7 +59,7 @@ export default function LoginPage() {
            
                     />
                 </div>
-                <button type="submit" className={styles.loginButton}>
+                <button type="submit" className={`hoverable ${styles.loginButton}`}>
                     Log In
                 </button>
                 <p className={`${error ? styles.error : styles.fair}`}>Felaktiga uppgifter</p>

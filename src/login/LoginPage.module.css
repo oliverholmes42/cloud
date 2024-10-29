@@ -67,8 +67,6 @@
 
 /* Hover effect on the login button */
 .loginButton:hover {
-    background-color: var(--white);
-    color: var(--black);
     transform: scale(1.02);
 }
 

@@ -87,14 +87,14 @@ export default function LocationPage() {
                     </select>
                 </div>
 
-                <button type="submit" className={styles.loginButton}>
+                <button type="submit" className={`hoverable ${styles.loginButton}`}>
                     Välj
                 </button>
                 
 
                 {error && <p className={styles.error}>Please select both a location and section.</p>}
             </form>
-            <button onClick={logout} className={styles.logoutButton}>
+            <button onClick={logout} className={`hoverable ${styles.logoutButton}`}>
                     Logga ut 
                     <FontAwesomeIcon icon={faRightToBracket}/>
                 </button>

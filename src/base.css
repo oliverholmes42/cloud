@@ -1,11 +1,13 @@
 :root{
-    --white: #EBEBF0;
---black: #2B2B2E;
---accent: #88C0D0; /* Soft Teal */
---darkAccent: #4B4B50;
+    --white: #EFEFEF; /* Slightly warmer white */
+--black: #1F1F22; /* Deeper black */
+--accent: #9ed7e4; /* Soft Sky Blue */
+--darkAccent: #37373D; /* Muted Charcoal for contrast */
 
---block: #F1F1F4;
---darkBlock: #C2C2C8;
+--block: #F8F9FA; /* Softer, cleaner block color */
+--darkBlock: #B8B8C2; /* Slightly more neutral dark block */
+
+    
     background-color: var(--white);
 }
 
@@ -116,9 +118,7 @@ input:focus {
     }
 }
 
-.desktop {
-    /* Styles for desktop elements */
-}
+
 
 .mobile {
     display: none;
@@ -148,7 +148,6 @@ input:focus {
   /* Change background color for elements with only .hoverable (and not .icon) */
   .hoverable:not(.icon):hover {
     background-color: var(--darkBlock); /* Change the background color */
-    color: var(--black)
   }
   
   /* Change text or icon color for elements with both .hoverable and .icon */

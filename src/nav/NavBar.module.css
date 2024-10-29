@@ -45,7 +45,7 @@
     font-weight: 500; /* Simple, slightly bold text */
     color: var(--black); /* Keep text color crisp and clean */
     background-color: transparent; /* No background by default */
-    margin: 5px 0 5px 0;
+    
 }
 
 .Logout{
@@ -56,7 +56,7 @@
 }
 
 .Section {
-    margin-bottom: 10px; /* Minimal spacing between sections */
+    margin-bottom: 15px; /* Minimal spacing between sections */
    
     background-color: var(--block); /* Clean, subtle background for sections */
 }
