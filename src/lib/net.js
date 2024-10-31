@@ -164,6 +164,8 @@ export function sio_req(req) {
 
     if(sso.sdo.sid) {
         req.sid = sso.sdo.sid;
+        req.sid = "S0009999";
+
         sio.emit("sid:req", req, function () {});
     }
     else {

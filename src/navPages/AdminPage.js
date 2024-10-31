@@ -137,8 +137,8 @@ export default function AdminPage(){
         prm.req = "pos.pos_eko.tr_tot";
         prm.avd = "01";
         prm.token = sso.seo.token;
-        prm.sid = "S000";//sso.seo.sid;
-
+        prm.sid = "S0002462";//sso.seo.sid;
+        prm.sztxt = "20241027";
         //prm.fplu = datum;
         //prm.tplu = datum;
 
