@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Cell } from "recharts";
 import sales from '../data/sales.json'; // Assuming your sales data is here
 import Select from 'react-select/base';
@@ -11,12 +11,17 @@ export default function Dash() {
     sales2: sales[1][index]?.sales || null,  // This week's sales (only shown if present)
     difference: sales[1][index]?.sales != null ? sales[1][index].sales - item.sales : null  // Calculate gain/loss if this week's data exists
   }));
+  const [date, setDate] = useState();
+
+ 
 
   const minSales = Math.min(...mergedData.flatMap(item => [item.sales1, item.sales2].filter(val => val !== null)));
 
   return (
     <>
       <h1 style={{ textAlign: "center" }}>Översikt</h1>
+      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
         
         {/* BarChart with both sales sets */}

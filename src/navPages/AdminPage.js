@@ -1,8 +1,8 @@
 import PlaceholderPage from "../stackPages/PlaceholderPage";
 import {useState} from "react";
-import ddo from "../ddo";
-import * as net from "../lib/net";
-import sso from "../sso"
+import ddo from "../api/ddo";
+import * as net from "../api/lib/net";
+import sso from "../api/sso"
 
 export default function AdminPage(){
     const temp = <PlaceholderPage/>

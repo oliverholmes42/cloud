@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function LocationPage() {
-    const {logout} = useContext(AuthContext);
+    const { logout, putLocation } = useContext(AuthContext);
     const locations = [
-        { id: 91356735131, name: 'The Green Tavern' },
-        { id: 91356735132, name: 'Pitchers Örebro' }
+        { id: 91356735131, name: 'The Green Tavern', sid: "s0009999" },
+        { id: 91356735132, name: 'Pitchers Örebro', sid: "s0002462" }
     ];
 
     const sections = [
@@ -20,33 +20,33 @@ export default function LocationPage() {
     ];
 
     const [formData, setFormData] = useState({
-        location: locations[1].id, // Set default location to the first one
+        location: locations[0].id, // Store only the ID
         section: sections[0].id
     });
     const [error, setError] = useState(false);
-    const { putLocation } = useContext(AuthContext); // Get the putLocation function from AuthContext
 
-    // Generic handleChange for all fields
     const handleChange = (e) => {
         setError(false);
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value, // Dynamically update based on the name attribute
+            [name]: parseInt(value) // Store as an integer
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formData.location || !formData.section) {
+        const locationObj = locations.find(loc => loc.id === formData.location);
+        const sectionObj = sections.find(sec => sec.id === formData.section);
+
+        if (!locationObj || !sectionObj) {
             setError(true);
         } else {
-            putLocation(formData); // Submit form data with selected location and section
+            putLocation({ location: locationObj, section: sectionObj }); // Pass full objects
         }
     };
 
-    // Filter sections based on selected location
-    const filteredSections = sections.filter(section => section.locationID === parseInt(formData.location));
+    const filteredSections = sections.filter(section => section.locationID === formData.location);
 
     return (
         <div className={styles.loginContainer}>
@@ -90,14 +90,12 @@ export default function LocationPage() {
                 <button type="submit" className={styles.loginButton}>
                     Välj
                 </button>
-                
-
                 {error && <p className={styles.error}>Please select both a location and section.</p>}
             </form>
             <button onClick={logout} className={styles.logoutButton}>
-                    Logga ut 
-                    <FontAwesomeIcon icon={faRightToBracket}/>
-                </button>
+                Logga ut 
+                <FontAwesomeIcon icon={faRightToBracket} />
+            </button>
         </div>
     );
 }

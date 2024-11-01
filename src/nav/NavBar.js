@@ -45,7 +45,8 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
         setActive(page);
     }
 
-    const {logout, removeLocation} = useContext(AuthContext);
+    const {logout, removeLocation, location} = useContext(AuthContext);
+ 
 
     useEffect(() => {
         setActive(items[0][0].page); // Set first item from first section as default
@@ -76,7 +77,7 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
                     ))}
                 </div>
             ))}
-            <button className={`hoverable ${styles.Logout}`} onClick={removeLocation}><FontAwesomeIcon icon={faChevronLeft} /> Byt säljställe </button>
+            <button className={`hoverable ${styles.Logout}`} onClick={removeLocation}><FontAwesomeIcon icon={faChevronLeft} /> {location.location.name + " " + location.section.name} </button>
             </>
         )
     }
