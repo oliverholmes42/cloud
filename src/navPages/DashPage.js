@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Cell } from "recharts";
+import React, { useContext, useEffect, useState } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Cell, PieChart, Pie } from "recharts";
 import sales from '../data/sales.json'; // Assuming your sales data is here
 import Select from 'react-select/base';
 import tickets from '../data/ticketScreens.json'
+import { fetchStats } from '../api/api';
+import { AuthContext } from '../AuthContext';
 
 export default function Dash() {
   const mergedData = sales[0].map((item, index) => ({
@@ -12,15 +14,35 @@ export default function Dash() {
     difference: sales[1][index]?.sales != null ? sales[1][index].sales - item.sales : null  // Calculate gain/loss if this week's data exists
   }));
   const [date, setDate] = useState();
+  const [data, setData] = useState(null);
+  const {token, location} = useContext(AuthContext);
 
- 
+  useEffect(()=>{
+    console.log(data);
+  },[data])
+
+
+  async function fetcho() {
+    console.log("ELlo");
+
+    try {
+        const result = await fetchStats(token, location.location.sid, date.slice(0, 10).replace(/-/g, ''));
+        setData(result.rca.filter(item => item.grp !== "tot"))
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+    }
+}
+
 
   const minSales = Math.min(...mergedData.flatMap(item => [item.sales1, item.sales2].filter(val => val !== null)));
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#A28FAD', '#82CA9D', '#FF6666'];
+
 
   return (
     <>
       <h1 style={{ textAlign: "center" }}>Översikt</h1>
       <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+      <button onClick={fetcho}>Hämta data</button>
 
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-evenly" }}>
         
@@ -81,8 +103,32 @@ export default function Dash() {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
+
+        
+
+
         
       </div>
+      {data && (
+    <ResponsiveContainer width={800} height={400}>
+        <PieChart>
+            <Pie 
+                data={data} 
+                dataKey="antal" 
+                nameKey="text" 
+                cx="50%" 
+                cy="50%" 
+                outerRadius={200}
+            >
+                {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+            </Pie>
+            <Tooltip />
+            <Legend verticalAlign="right" layout="vertical" align="right" />
+        </PieChart>
+    </ResponsiveContainer>
+)}
     </>
   );
 }

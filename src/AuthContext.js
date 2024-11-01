@@ -7,6 +7,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); // State to hold user data
     const [location, setLocation] = useState(null);
+    const [token, setToken] = useState(null);
 
     // Load user data from sessionStorage on initial load
     useEffect(() => {
@@ -36,6 +37,16 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.removeItem('location');
     }
 
+    const putToken = (data) => {
+        setToken(data);
+        sessionStorage.setItem("token", JSON.stringify(data));
+    }
+    
+    const removeToken = () => {
+        setToken(null);
+        sessionStorage.removeItem("token");
+    }
+
     // Logout function to clear user data
     const logout = () => {
         setUser(null);
@@ -51,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, getUserData, putLocation, removeLocation, location}}>
+        <AuthContext.Provider value={{ user, login, logout, getUserData, putLocation, removeLocation, location, token, putToken, removeToken}}>
             {children}
         </AuthContext.Provider>
     );

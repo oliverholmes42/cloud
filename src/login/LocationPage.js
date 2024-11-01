@@ -7,8 +7,8 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 export default function LocationPage() {
     const { logout, putLocation } = useContext(AuthContext);
     const locations = [
-        { id: 91356735131, name: 'The Green Tavern', sid: "s0009999" },
-        { id: 91356735132, name: 'Pitchers Örebro', sid: "s0002462" }
+        { id: 91356735131, name: 'The Green Tavern', sid: "S0009999" },
+        { id: 91356735132, name: 'Pitchers Örebro', sid: "S0002462" }
     ];
 
     const sections = [

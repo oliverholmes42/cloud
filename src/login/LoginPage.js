@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 import styles from './LoginPage.module.css';
+import { loginToken } from '../api/api';
 
 export default function LoginPage() {
     const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ export default function LoginPage() {
         password: ''
     });
     const [error, setError] = useState(false);
-    const { login } = useContext(AuthContext); // Get the login function from AuthContext
+    const { login, putToken } = useContext(AuthContext); // Get the login function from AuthContext
 
     // Generic handleChange for all fields
     const handleChange = (e) => {
@@ -20,13 +21,25 @@ export default function LoginPage() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
         const { email, password } = formData;
 
         // Validate the input with hardcoded credentials
         if (email === 'test@user.com' && password === 'testpassword') {
             login(formData); // Call the login function from AuthContext
+            loginToken()
+    .then((token) => {
+        if (token) {
+            console.log("Token received:", token);
+            putToken(token); // Pass the token if it exists
+        } else {
+            console.log("Failed to retrieve token.");
+        }
+    })
+    .catch((error) => {
+        console.error("Error in login process:", error);
+    });
         } else {
             setError(true); // Show error if credentials are wrong
         }
