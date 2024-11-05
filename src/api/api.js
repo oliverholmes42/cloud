@@ -60,3 +60,22 @@ export async function fetchStats(token, location, date) {
     }
 }
 
+export async function fetchUsers(token, location) {
+    const prm = {
+        req: "pos.pos_cr.crs",
+        avd: "01",
+        token: token,
+        sid: location, // Assuming `location` is the session ID
+
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    try {
+        const ret = await net.sio_req(prm); // Wait for the request to complete
+        return ret; // Return the result if successful
+    } catch (error) {
+        console.error("Error fetching stats:", error);
+        return null; // Return null or throw error based on your error handling preference
+    }
+}
