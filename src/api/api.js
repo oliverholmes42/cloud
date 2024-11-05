@@ -73,9 +73,37 @@ export async function fetchUsers(token, location) {
 
     try {
         const ret = await net.sio_req(prm); // Wait for the request to complete
-        return ret; // Return the result if successful
+        return ret.rco; // Return the result if successful
     } catch (error) {
         console.error("Error fetching stats:", error);
         return null; // Return null or throw error based on your error handling preference
     }
+}
+
+export async function  saveUser(token, location,data) {
+    var prm = {};
+    prm.req = "pos.pos_cr.cr_upd";
+    prm.ser00 = data.ser00;
+    prm.ser01 = data.ser01;
+    prm.ser02 = data.ser02;
+    prm.ser03 = data.ser03;
+    prm.token = token;
+    prm.sid = location;
+
+    net.sio_req(prm)
+        .then(function(ret){
+            //alert(JSON.stringify(ret.ok));
+            if(ret.ok != "000") {
+                alert("Kan ej spara");
+                return;
+            }
+            //if(self.props.close) self.props.close(self.props.ctx);
+            //else self.props.ctx.setState({ wnds: {} });
+
+            //self.setState({cso: cso });
+        })
+        .catch(function(e){
+            var txt = JSON.stringify(e);
+            console.log(txt);
+        });
 }
