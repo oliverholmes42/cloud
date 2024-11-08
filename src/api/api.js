@@ -60,24 +60,39 @@ export async function fetchStats(token, location, date) {
     }
 }
 
-export async function fetchUsers(token, location) {
+export function fetchUsers(token, location) {
     const prm = {
         req: "pos.pos_cr.crs",
         avd: "01",
         token: token,
         sid: location, // Assuming `location` is the session ID
-
     };
 
     console.log("Fetching stats with parameters:", prm);
 
-    try {
-        const ret = await net.sio_req(prm); // Wait for the request to complete
-        return ret.rco; // Return the result if successful
-    } catch (error) {
-        console.error("Error fetching stats:", error);
-        return null; // Return null or throw error based on your error handling preference
-    }
+    return net.sio_req(prm)
+        .then(ret => ret.rco) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchInvoiceCustomers(token, location) {
+    const prm = {
+        req: "kreg.kreg_wrk.kreg_list",
+        token: token,
+        sid: location,
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rca) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
 }
 
 export async function  saveUser(token, location,data) {

@@ -13,11 +13,16 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = sessionStorage.getItem('user');
         const storedLocation = sessionStorage.getItem('location');
+        const storedToken = sessionStorage.getItem('token');
         if (storedUser) {
             setUser(JSON.parse(storedUser)); // Set user from sessionStorage
         }
         if (storedLocation){
             setLocation(JSON.parse(storedLocation))
+        }
+
+        if(storedToken){
+            setToken(JSON.parse(storedToken))
         }
     }, []);
 

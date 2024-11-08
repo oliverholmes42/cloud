@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import Select from 'react-select/base';
 import DropDown from '../components/dropdown/DropDown';
+import { getNestedValue } from '../components/ItemTable/ItemTable';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faGear, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // EditTableRow Component
 export default function EditTableRow({ item, fields, onSave, onDelete, onEdit }) {
@@ -14,23 +17,21 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
     }
   }, [ref]);
 
-  useEffect(()=>{
-    console.log(formData)
-  },[formData])
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   const handleInputChange = (e, field) => {
     let value = e.target.value;
 
-    // Parse the value based on field type
     if (field.type === 'number') {
-      value = parseFloat(value) || 0; // Convert to float, handle empty or invalid input
+      value = parseFloat(value) || 0;
     }
 
     if (field.type === 'select') {
-      value = e.target.value; // Select value stays as string
+      value = e.target.value;
     }
 
-    // Update formData with parsed value
     setFormData({
       ...formData,
       [field.key]: value,
@@ -41,24 +42,23 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
     setFormData({
       ...formData,
       [name]: value
-    })
-  }
+    });
+  };
 
   const save = () => {
     toast.success('Item saved');
-    onSave(formData); // Trigger save callback
+    onSave(formData);
   };
 
   const remove = () => {
     toast.success('Item deleted');
-    onDelete(item.id); // Trigger delete callback
+    onDelete(item.id);
   };
 
-  // Custom input rendering function
   const renderInput = (field, value, index) => {
     const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
-        save(); // Save the form when Enter is pressed
+        save();
       }
     };
 
@@ -87,29 +87,29 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
             onKeyDown={handleKeyDown}
           />
         );
-        case 'select':
-          const format = field.format;
-          const multiple = (format && format.multiple) || false;
-        
-          if (multiple) {
-            return (
-              <DropDown options={field.options} onChange={handleMultiChange} value={value} name={"ticket"} onSave={save}/>
-            );
-          } else {
-            return (
-              <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
-                {field.options.map((option, index) => {
-                  const value = option.id || option.value || option;
-                  const name = option.name || option.title || option;
-                  return (
-                    <option key={index} value={value}>
-                      {name}
-                    </option>
-                  );
-                })}
-              </select>
-            );
-          }
+      case 'select':
+        const format = field.format;
+        const multiple = (format && format.multiple) || false;
+
+        if (multiple) {
+          return (
+            <DropDown options={field.options} onChange={handleMultiChange} value={value} name={field.key} onSave={save} />
+          );
+        } else {
+          return (
+            <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
+              {field.options.map((option, index) => {
+                const optionValue = option.id || option.value || option;
+                const optionName = option.name || option.title || option;
+                return (
+                  <option key={index} value={optionValue}>
+                    {optionName}
+                  </option>
+                );
+              })}
+            </select>
+          );
+        }
       default:
         return (
           <input
@@ -126,17 +126,19 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
   return (
     <tr>
       {fields.map((field, index) => (
-        !field.advanced&&
-        <td key={index}>
-          {index === fields.length - 2 ? (
-            <button className='hoverable' onClick={onEdit}>Inställningar</button>
-          ) : index === fields.length - 1 ? (
-            <button className='hoverable delete' onClick={remove}>Radera</button>
-          ) : (
-            renderInput(field, formData[field.key], index)
-          )}
-        </td>
+        !field.advanced && (
+          <td key={index}>
+            {
+              renderInput(field, getNestedValue(formData, field.key), index)
+            }
+          </td>
+        )
       ))}
+      <td style={{textAlign: "right", paddingRight: "20px"}}>
+        <button className='hoverable' onClick={onEdit} style={{marginRight: "20px"}}><FontAwesomeIcon icon={faPenToSquare}/></button>
+        <button className='hoverable' onClick={onEdit} style={{marginRight: "20px"}}><FontAwesomeIcon icon={faCopy}/></button>
+        <button className='hoverable delete' onClick={remove}><FontAwesomeIcon icon={faTrash}/></button>
+      </td>
     </tr>
   );
 }

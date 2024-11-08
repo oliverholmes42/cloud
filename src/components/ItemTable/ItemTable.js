@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EditTableRow from '../../itemHandling/EditTableRow';
 import styles from './ItemTable.module.css'; // Use your provided module.css
 import SearchBar from '../SearchBar/SearchBar';
@@ -6,11 +6,20 @@ import FloatingButton from '../FloatingButton/FloatingButton';
 import { useStack } from '../../StackContext';
 import ItemForm from '../../stackPages/ItemForm/ItemForm';
 
+export function getNestedValue (obj, key){
+  if (Array.isArray(key)) {
+      return key.reduce((acc, part) => acc && acc[part], obj);
+  }
+  return key.split('.').reduce((acc, part) => acc && acc[part], obj);
+};
+
 // Custom table component
 export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
   const [selectedRow, setSelectedRow] = useState(null); // State to track the selected row
   const {push} = useStack();
   const [filteredData, setFilteredData] = useState(data);
+
+  useEffect(()=>{setFilteredData(data)},[data])
 
   const mobileFields = fields
     .filter(field => field.mobile)
@@ -101,6 +110,10 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
       setFilteredData(data);
     }
   };
+
+  
+
+  
   
 
   return (<>
@@ -118,13 +131,14 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
               {field.title.toUpperCase()}
             </th>)
           ))}
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {filteredData.map((item, index) => (
           index === selectedRow ? (
             <EditTableRow
-              key={item.id}
+              key={index}
               item={item}
               fields={fields}
               onSave={(updatedItem) => {
@@ -139,16 +153,18 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
             />
           ) : (
             <tr
-              key={item.id}
+              key={index}
               onClick={() => setSelectedRow(index)}
               className={index % 2 === 0 ? '' : styles.oddRow}
             >
               {fields.map((field, fieldIndex) => (
                 !field.advanced&&
                 <td key={fieldIndex} className={styles.td}>
-                  {formatValue(item[field.key], field)}
+                  {formatValue(getNestedValue(item, field.key), field)}
                 </td>
+
               ))}
+              <td></td>
             </tr>
           )
         ))}
@@ -164,9 +180,9 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
                 .filter(field => field.mobile <= 3)
                 .map((field) => (
                   <div key={field.key}>
-                    {field.mobile === 1 && <h3>{formatValue(item[field.key], field)}</h3>}
-                    {field.mobile === 2 && <h4 style={{color: "var(--darkAccent)"}}>{formatValue(item[field.key], field)}</h4>}
-                    {field.mobile === 3 && <h5>{formatValue(item[field.key], field)}</h5>}
+                    {field.mobile === 1 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                    {field.mobile === 2 && <h4 style={{color: "var(--darkAccent)"}}>{formatValue(getNestedValue(item, field.key), field)}</h4>}
+                    {field.mobile === 3 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
                   </div>
                 ))}
             </div>
@@ -176,8 +192,8 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
                 .filter(field => field.mobile > 3)
                 .map((field) => (
                   <div key={field.key}>
-                    {field.mobile === 4 && <h3>{formatValue(item[field.key], field)}</h3>}
-                    {field.mobile === 5 && <h5>{formatValue(item[field.key], field)}</h5>}
+                    {field.mobile === 4 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                    {field.mobile === 5 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
                   </div>
                 ))}
             </div>

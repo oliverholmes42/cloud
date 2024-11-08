@@ -13,13 +13,17 @@ export default function Dash() {
     sales2: sales[1][index]?.sales || null,  // This week's sales (only shown if present)
     difference: sales[1][index]?.sales != null ? sales[1][index].sales - item.sales : null  // Calculate gain/loss if this week's data exists
   }));
-  const [date, setDate] = useState();
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [data, setData] = useState(null);
   const {token, location} = useContext(AuthContext);
 
   useEffect(()=>{
     console.log(data);
   },[data])
+
+  useEffect(()=>{
+    console.log(date);
+  }, [date])
 
 
   async function fetcho() {

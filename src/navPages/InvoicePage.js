@@ -1,6 +1,7 @@
 import { useMemo } from "react"
 import Categories from "../stackPages/articles/Categories"
 import Drawer from "../nav/Drawer"
+import Customers from "../stackPages/Invoices/Customers"
 
 export default function InvoicePage(){
     const items = useMemo(() => [[
@@ -9,7 +10,7 @@ export default function InvoicePage(){
       ],
       [
         { title: "Kunder" }, // Group Title
-        { title: "Kunder", page: <Categories /> },
+        { title: "Kunder", page: <Customers/> },
         { title: "Statistik", page: <Categories /> },
       ],
       [

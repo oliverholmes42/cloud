@@ -3,6 +3,7 @@
 import React, {useMemo} from 'react';
 import Drawer from '../nav/Drawer';
 import PlaceholderPage from '../stackPages/PlaceholderPage';
+import UserRoles from '../stackPages/UserRoles';
 
 export default function Settings() {
 
@@ -12,7 +13,7 @@ export default function Settings() {
         [
           { title: "Användarhantering" },
           { title: "Rättigheter för roller", page: temp },
-          { title: "Anställdas profiler", page: temp },
+          { title: "Anställdas profiler", page: <UserRoles/> },
           { title: "Åtkomstloggar", page: temp },
           { title: "Granskningsspår", page: temp },
         ],

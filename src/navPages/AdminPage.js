@@ -205,13 +205,6 @@ export default function AdminPage(){
     }
 
     return (
-        <div>
-            <p>Test</p>
-            <button onClick={login}>Test login</button>
-            <button onClick={st_vgrp}>Hämta data!</button>
-            <button onClick={st_hh}>Hämta data2 !</button>
-            <button onClick={verify_ses}>Verifiera session</button>
-
-            {sso.seo.verified && <p>Inloggad som: {sso.seo.verified}</p>}
-        </div>);
+        <PlaceholderPage/>
+        );
 }
