@@ -7,183 +7,204 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { getNestedValue } from "../../components/ItemTable/ItemTable";
 
+// Helper function to set nested values in an object
+const setNestedValue = (obj, key, value) => {
+    const keys = Array.isArray(key) ? key : key.split('.');
+    keys.reduce((acc, part, index) => {
+        if (index === keys.length - 1) {
+            acc[part] = value;
+        } else {
+            if (!acc[part]) acc[part] = {};
+            return acc[part];
+        }
+    }, obj);
+};
+
 export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMode = false, onDelete }) {
-  const { pop } = useStack();
-  const [formData, setFormData] = useState(
-    fields.reduce((acc, field) => {
-      acc[field.key] = getNestedValue(initialData, field.key) || (field.type === "select" && field.format?.multiple ? [] : "");
-      return acc;
-    }, {})
-  );
+    const { pop } = useStack();
+    const [formData, setFormData] = useState(initialData);
+    const ref = useRef(null);
 
-  const [expandedSection, setExpandedSection] = useState(null);
-  const ref = useRef(null);
+    useEffect(() => {
+        if (ref.current) {
+            ref.current.focus();
+        }
+    }, [ref]);
 
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  }, []);
+    useEffect(() => {
+        console.log("Updated formData:", formData);
+    }, [formData]);
 
-  const handleInputChange = (key, value) => {
-    setFormData({
-      ...formData,
-      [key]: value,
-    });
-  };
+    const handleInputChange = (e, field) => {
+        let value = e.target.value;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const message = isEditMode ? "Ändringarna sparades" : "Artikel tillagd";
-    toast.success(message);
-    onSubmit(formData);
-    pop();
-  };
+        if (field.type === 'number') {
+            value = parseFloat(value) || 0; // Convert to float, handle empty or invalid input
+        }
 
-  const handleDelete = () => {
-    if (onDelete && isEditMode) {
-      toast.success("Artikel borttagen");
-      onDelete(initialData.id);
-      pop();
-    }
-  };
+        const updatedFormData = { ...formData };
+        setNestedValue(updatedFormData, field.key, value);
+        setFormData(updatedFormData);
+    };
 
-  const toggleSection = (sectionName) => {
-    setExpandedSection((prev) => (prev === sectionName ? null : sectionName));
-  };
+    const handleMultiChange = (key, value) => {
+        const updatedFormData = { ...formData };
+        setNestedValue(updatedFormData, key, value);
+        setFormData(updatedFormData);
+    };
 
-  const basicFields = fields.filter((field) => !field.advanced);
-  const advancedSections = fields
-    .filter((field) => field.advanced)
-    .reduce((sections, field) => {
-      if (!sections[field.advanced]) {
-        sections[field.advanced] = [];
-      }
-      sections[field.advanced].push(field);
-      return sections;
-    }, {});
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const message = isEditMode ? "Ändringarna sparades" : "Artikel tillagd";
+        toast.success(message);
+        onSubmit(formData);
+        pop();
+    };
 
-  return (
-    <form onSubmit={handleSubmit} className={styles.ItemForm}>
-      <div className="block">
-        <h2 className="header">Basic Information</h2>
-        <div className={styles.block}>
-          {basicFields.map((field) => (
-            field.type !== "read" && (
-              <div key={field.key} className={styles.FormGroup}>
-                <label className="label">{field.title}</label>
-                {field.type === "text" && (
-                  <input
-                    type="text"
-                    value={formData[field.key]}
-                    onChange={(e) => handleInputChange(field.key, e.target.value)}
-                    ref={ref}
-                  />
-                )}
-                {field.type === "number" && (
-                  <input
-                    type="number"
-                    value={formData[field.key]}
-                    onChange={(e) => handleInputChange(field.key, parseFloat(e.target.value) || 0)}
-                  />
-                )}
-                {field.type === "select" && !field.format?.multiple && (
-                  <select
-                    value={formData[field.key]}
-                    onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  >
-                    {field.options.map((option, index) => (
-                      <option key={index} value={option}>
-                        {option === true ? "Yes" : option === false ? "No" : option}
-                      </option>
+    const handleDelete = () => {
+        if (onDelete && isEditMode) {
+            toast.success("Artikel borttagen");
+            onDelete(initialData.id);
+            pop();
+        }
+    };
+
+    const toggleSection = (sectionName) => {
+        setExpandedSection((prev) => (prev === sectionName ? null : sectionName));
+    };
+
+    const [expandedSection, setExpandedSection] = useState(null);
+    const basicFields = fields.filter((field) => !field.advanced);
+    const advancedSections = fields
+        .filter((field) => field.advanced)
+        .reduce((sections, field) => {
+            if (!sections[field.advanced]) {
+                sections[field.advanced] = [];
+            }
+            sections[field.advanced].push(field);
+            return sections;
+        }, {});
+
+    return (
+        <form onSubmit={handleSubmit} className={styles.ItemForm}>
+            <div className="block">
+                <h2 className="header">Basic Information</h2>
+                <div className={styles.block}>
+                    {basicFields.map((field) => (
+                        field.type !== "read" && (
+                            <div key={field.key} className={styles.FormGroup}>
+                                <label className="label">{field.title}</label>
+                                {field.type === "text" && (
+                                    <input
+                                        type="text"
+                                        value={getNestedValue(formData, field.key) || ""}
+                                        onChange={(e) => handleInputChange(e, field)}
+                                        ref={ref}
+                                    />
+                                )}
+                                {field.type === "number" && (
+                                    <input
+                                        type="number"
+                                        value={getNestedValue(formData, field.key) || ""}
+                                        onChange={(e) => handleInputChange(e, field)}
+                                    />
+                                )}
+                                {field.type === "select" && !field.format?.multiple && (
+                                    <select
+                                        value={getNestedValue(formData, field.key) || ""}
+                                        onChange={(e) => handleInputChange(e, field)}
+                                    >
+                                        {field.options.map((option, index) => (
+                                            <option key={index} value={option}>
+                                                {option === true ? "Yes" : option === false ? "No" : option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                                {field.type === "select" && field.format?.multiple && (
+                                    <DropDown
+                                        options={field.options}
+                                        value={getNestedValue(formData, field.key) || []}
+                                        name={field.key}
+                                        onChange={(value) => handleMultiChange(field.key, value)}
+                                    />
+                                )}
+                            </div>
+                        )
                     ))}
-                  </select>
-                )}
-                {field.type === "select" && field.format?.multiple && (
-                  <DropDown
-                    options={field.options}
-                    value={formData[field.key]}
-                    name={field.key}
-                    onChange={(value) => handleInputChange(field.key, value)}
-                  />
-                )}
-              </div>
-            )
-          ))}
-        </div>
-      </div>
-
-      {Object.keys(advancedSections).length > 0 && (
-        <div className={styles.advancedSectionsContainer}>
-          {Object.keys(advancedSections).map((sectionName) => (
-            <div key={sectionName} className={`block`}>
-              <div className={`hoverable icon ${styles.advancedSectionHeaderContainer}`}>
-                <h3
-                  onClick={() => toggleSection(sectionName)}
-                  className={styles.advancedSectionHeader}
-                >
-                  {sectionName} {expandedSection === sectionName ? <FontAwesomeIcon icon={faAngleUp} /> : <FontAwesomeIcon icon={faAngleDown} />}
-                </h3>
-              </div>
-              <div className={expandedSection === sectionName ? styles.block : styles.hidden}>
-                {advancedSections[sectionName].map((field) => (
-                  field.type !== "read" && (
-                    <div key={field.key} className={styles.FormGroup}>
-                      <label className="label">{field.title}</label>
-                      {field.type === "text" && (
-                        <input
-                          type="text"
-                          value={formData[field.key]}
-                          onChange={(e) => handleInputChange(field.key, e.target.value)}
-                        />
-                      )}
-                      {field.type === "number" && (
-                        <input
-                          type="number"
-                          value={formData[field.key]}
-                          onChange={(e) => handleInputChange(field.key, parseFloat(e.target.value) || 0)}
-                        />
-                      )}
-                      {field.type === "select" && !field.format?.multiple && (
-                        <select
-                          value={formData[field.key]}
-                          onChange={(e) => handleInputChange(field.key, e.target.value)}
-                        >
-                          {field.options.map((option, index) => (
-                            <option key={index} value={option}>
-                              {option === true ? "Yes" : option === false ? "No" : option}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {field.type === "select" && field.format?.multiple && (
-                        <DropDown
-                          options={field.options}
-                          value={formData[field.key]}
-                          name={field.key}
-                          onChange={(value) => handleInputChange(field.key, value)}
-                        />
-                      )}
-                    </div>
-                  )
-                ))}
-              </div>
+                </div>
             </div>
-          ))}
-        </div>
-      )}
 
-      <div className={styles.buttonContainer}>
-        <button type="submit" className="hoverable" style={{ marginRight: "10px" }}>
-          {isEditMode ? "Spara" : "Skapa"}
-        </button>
-        {isEditMode && (
-          <button type="button" className="hoverable delete" onClick={handleDelete}>
-            Radera
-          </button>
-        )}
-      </div>
-    </form>
-  );
+            {Object.keys(advancedSections).length > 0 && (
+                <div className={styles.advancedSectionsContainer}>
+                    {Object.keys(advancedSections).map((sectionName) => (
+                        <div key={sectionName} className={`block`}>
+                            <div className={`hoverable icon ${styles.advancedSectionHeaderContainer}`}>
+                                <h3
+                                    onClick={() => toggleSection(sectionName)}
+                                    className={styles.advancedSectionHeader}
+                                >
+                                    {sectionName} {expandedSection === sectionName ? <FontAwesomeIcon icon={faAngleUp} /> : <FontAwesomeIcon icon={faAngleDown} />}
+                                </h3>
+                            </div>
+                            <div className={expandedSection === sectionName ? styles.block : styles.hidden}>
+                                {advancedSections[sectionName].map((field) => (
+                                    field.type !== "read" && (
+                                        <div key={field.key} className={styles.FormGroup}>
+                                            <label className="label">{field.title}</label>
+                                            {field.type === "text" && (
+                                                <input
+                                                    type="text"
+                                                    value={getNestedValue(formData, field.key) || ""}
+                                                    onChange={(e) => handleInputChange(e, field)}
+                                                />
+                                            )}
+                                            {field.type === "number" && (
+                                                <input
+                                                    type="number"
+                                                    value={getNestedValue(formData, field.key) || ""}
+                                                    onChange={(e) => handleInputChange(e, field)}
+                                                />
+                                            )}
+                                            {field.type === "select" && !field.format?.multiple && (
+                                                <select
+                                                    value={getNestedValue(formData, field.key) || ""}
+                                                    onChange={(e) => handleInputChange(e, field)}
+                                                >
+                                                    {field.options.map((option, index) => (
+                                                        <option key={index} value={option}>
+                                                            {option === true ? "Yes" : option === false ? "No" : option}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            )}
+                                            {field.type === "select" && field.format?.multiple && (
+                                                <DropDown
+                                                    options={field.options}
+                                                    value={getNestedValue(formData, field.key) || []}
+                                                    name={field.key}
+                                                    onChange={(value) => handleMultiChange(field.key, value)}
+                                                />
+                                            )}
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <div className={styles.buttonContainer}>
+                <button type="submit" className="hoverable" style={{ marginRight: "10px" }}>
+                    {isEditMode ? "Spara" : "Skapa"}
+                </button>
+                {isEditMode && (
+                    <button type="button" className="hoverable delete" onClick={handleDelete}>
+                        Radera
+                    </button>
+                )}
+            </div>
+        </form>
+    );
 }
- 

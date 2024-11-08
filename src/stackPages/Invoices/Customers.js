@@ -30,9 +30,13 @@ export default function Customers(){
         {key: ["krr02", "orgnr"], title: "Orgnr", type: "text", mobile: 4}
     ]
 
+    const save = (item) => {
+        console.log("Saved item: ", item);
+    }
+
 
     return(
-        <ItemTable data={data} fields={fields}/>
+        <ItemTable data={data} fields={fields} onSave={save}/>
     )
 
 }
