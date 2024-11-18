@@ -123,12 +123,14 @@ export async function  saveUser(token, location,data) {
         });
 }
 
-export async function fetchSteps(token, location) {
+export async function fetchSteps(token, location, limit = 10000, offset = 0) {
     const prm = {
         req: "pos.pos_plumenu.plumenus",
         avd: "01",
         token: token,
         sid: location,
+        limit: 100,
+        offset: 0
     };
 
     console.log("Fetching stats with parameters:", prm);
@@ -144,7 +146,7 @@ export async function fetchSteps(token, location) {
         });
 }
 
-export async function fetchProducts(token, location, limit = 100, offset = 0){
+export async function fetchProducts(token, location, limit = 10000, offset = 0){
     const prm = {
         req: "pos.pos_plu.plus",
         avd: "01",

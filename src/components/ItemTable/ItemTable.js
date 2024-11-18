@@ -14,12 +14,15 @@ export function getNestedValue (obj, key){
 };
 
 // Custom table component
-export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
+export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page, setPage, limit, setLimit }) {
   const [selectedRow, setSelectedRow] = useState(null); // State to track the selected row
   const {push} = useStack();
   const [filteredData, setFilteredData] = useState(data);
+  const [inputPage, setInputPage] = useState(page);
 
   useEffect(()=>{setFilteredData(data)},[data])
+
+  useEffect(()=>{setInputPage(page)},[page])
 
   const mobileFields = fields
     .filter(field => field.mobile)
@@ -102,7 +105,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
     setFilteredData((prevData) => {
       // Filter the previous data based on the query
       return prevData.filter(item =>
-        // Adjust this condition based on what property you want to search
+        
         item.name.toLowerCase().includes(query.toLowerCase())
       );
     });}
@@ -110,6 +113,23 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
       setFilteredData(data);
     }
   };
+
+  const changePage = (change = inputPage) => {
+    switch (change){
+      case '+':
+        setPage((prev)=>prev+1);
+        break;
+      case '-':
+        if(page>1){
+          setPage((prev)=>prev-1);
+        }
+      default:
+        if(change>0){
+          setPage(change);
+        }
+
+    }
+  }
 
   
 
@@ -123,93 +143,170 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
         <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd} />
         <SearchBar onSearch={search} />
       </div>
-      {filteredData.length === 0 ? ( // Check if data is empty
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          Loading...
-        </div>
-      ) : (
-        <>
-          <table className={`${styles.table} desktop`} cellPadding="10" cellSpacing="0">
-            <thead>
-              <tr>
-                {fields.map((field, index) => (
-                  !field.advanced && (
-                    <th key={index} className={styles.th}>
-                      {field.title.toUpperCase()}
-                    </th>
-                  )
-                ))}
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((item, index) => (
-                index === selectedRow ? (
-                  <EditTableRow
-                    key={index}
-                    item={item}
-                    fields={fields}
-                    onSave={(updatedItem) => {
-                      onSave(updatedItem);
-                      setSelectedRow(null); // Exit edit mode after saving
-                    }}
-                    onDelete={(id) => {
-                      onDelete(id);
-                      setSelectedRow(null); // Exit edit mode after deleting
-                    }}
-                    onEdit={() => EditInMobile(item)}
-                  />
-                ) : (
-                  <tr
-                    key={index}
-                    onClick={() => setSelectedRow(index)}
-                    className={index % 2 === 0 ? '' : styles.oddRow}
-                  >
-                    {fields.map((field, fieldIndex) => (
-                      !field.advanced &&
+      {page && limit && (
+  <div style={{ display: "flex", justifyContent: "space-between", padding: "10px", alignItems: "center" }}>
+    {/* Page Size Selector */}
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <label style={{ fontWeight: "bold" }}>Antal per sida: </label>
+      <select
+        value={limit}
+        onChange={(e) => setLimit(e.target.value)}
+        style={{
+          padding: "5px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <option value={50}>50</option>
+        <option value={100}>100</option>
+        <option value={500}>500</option>
+        <option value={1000}>1000</option>
+        <option value={10000}>Alla</option>
+      </select>
+    </div>
+
+    {/* Page Navigator */}
+    <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+      <button
+        onClick={() => changePage('-')}
+        style={{
+          padding: "5px 10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          cursor: "pointer",
+        }}
+      >
+        &lt;
+      </button>
+      <input
+        type="number"
+        value={inputPage}
+        onChange={(e) => setInputPage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            changePage();
+          }
+        }}
+        style={{
+          width: "40px",
+          textAlign: "center",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+          padding: "5px",
+        }}
+      />
+      <button
+        onClick={() => changePage('+')}
+        style={{
+          padding: "5px 10px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+          cursor: "pointer",
+        }}
+      >
+        &gt;
+      </button>
+    </div>
+  </div>
+)}
+
+      <table className={`${styles.table} desktop`} cellPadding="10" cellSpacing="0">
+        <thead>
+          <tr>
+            {fields.map((field, index) => (
+              !field.advanced && (
+                <th key={index} className={styles.th}>
+                  {field.title.toUpperCase()}
+                </th>
+              )
+            ))}
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData === null ? (
+            // Display loading message under headers
+            <tr>
+              <td
+                colSpan={fields.filter(field => !field.advanced).length + 1}
+                style={{ textAlign: "center", padding: "20px" }}
+              >
+                Loading...
+              </td>
+            </tr>
+          ) : (
+            filteredData && filteredData.map((item, index) => (
+              index === selectedRow ? (
+                <EditTableRow
+                  key={index}
+                  item={item}
+                  fields={fields}
+                  onSave={(updatedItem) => {
+                    onSave(updatedItem);
+                    setSelectedRow(null); // Exit edit mode after saving
+                  }}
+                  onDelete={(id) => {
+                    onDelete(id);
+                    setSelectedRow(null); // Exit edit mode after deleting
+                  }}
+                  onEdit={() => EditInMobile(item)}
+                />
+              ) : (
+                <tr
+                  key={index}
+                  onClick={() => setSelectedRow(index)}
+                  className={index % 2 === 0 ? '' : styles.oddRow}
+                >
+                  {fields.map((field, fieldIndex) => (
+                    !field.advanced && (
                       <td key={fieldIndex} className={styles.td}>
                         {formatValue(getNestedValue(item, field.key), field)}
                       </td>
-                    ))}
-                    <td></td>
-                  </tr>
-                )
-              ))}
-            </tbody>
-          </table>
-          <div className="mobile">
-            {filteredData.map((item, fieldIndex) => (
-              <div key={fieldIndex} className={`${styles.mobileItem} block`} onClick={() => EditInMobile(item)}>
-                {/* Render the fields in two columns */}
-                <div className={styles.mobileColumn}>
-                  {/* First Column: 1, 2, 3 */}
-                  {mobileFields
-                    .filter(field => field.mobile <= 3)
-                    .map((field) => (
-                      <div key={field.key}>
-                        {field.mobile === 1 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
-                        {field.mobile === 2 && <h4 style={{ color: "var(--darkAccent)" }}>{formatValue(getNestedValue(item, field.key), field)}</h4>}
-                        {field.mobile === 3 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
-                      </div>
-                    ))}
-                </div>
-                <div className={styles.mobileColumn}>
-                  {/* Second Column: 4, 5 */}
-                  {mobileFields
-                    .filter(field => field.mobile > 3)
-                    .map((field) => (
-                      <div key={field.key}>
-                        {field.mobile === 4 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
-                        {field.mobile === 5 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            ))}
+                    )
+                  ))}
+                  <td></td>
+                </tr>
+              )
+            ))
+          )}
+        </tbody>
+      </table>
+      <div className="mobile">
+        {filteredData && filteredData.map((item, fieldIndex) => (
+          <div
+            key={fieldIndex}
+            className={`${styles.mobileItem} block`}
+            onClick={() => EditInMobile(item)}
+          >
+            {/* Render the fields in two columns */}
+            <div className={styles.mobileColumn}>
+              {/* First Column: 1, 2, 3 */}
+              {mobileFields
+                .filter(field => field.mobile <= 3)
+                .map((field) => (
+                  <div key={field.key}>
+                    {field.mobile === 1 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                    {field.mobile === 2 && <h4 style={{ color: "var(--darkAccent)" }}>{formatValue(getNestedValue(item, field.key), field)}</h4>}
+                    {field.mobile === 3 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
+                  </div>
+                ))}
+            </div>
+            <div className={styles.mobileColumn}>
+              {/* Second Column: 4, 5 */}
+              {mobileFields
+                .filter(field => field.mobile > 3)
+                .map((field) => (
+                  <div key={field.key}>
+                    {field.mobile === 4 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                    {field.mobile === 5 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
+                  </div>
+                ))}
+            </div>
           </div>
-        </>
-      )}
+        ))}
+      </div>
     </>
   );
+  
   
 }

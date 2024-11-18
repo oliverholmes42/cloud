@@ -6,9 +6,12 @@ import ItemTable from "../../components/ItemTable/ItemTable";
 export default function ProductSteps(){
     const [steps, setSteps] = useState([]);
     const [products, setProducts] = useState([]);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
 
     const {token, location} = useContext(AuthContext);
+
+    const [limit, setLimit] = useState(100);
+    const [page, setPage] = useState(1);
 
     const getSteps = async () => {
         try {
@@ -34,6 +37,7 @@ export default function ProductSteps(){
     },[])
 
     const createData = () => {
+        const list = [];
         for(let i = 0; i< steps.length;i++){
             const plunr = steps[i].plunr
             const plunrdel = steps[i].plunrdel
@@ -49,9 +53,16 @@ export default function ProductSteps(){
                     item.dNamn = products[j].plu00.p0namn;
                 }
             }
-            setData((prev) => [...prev, item]);
+            list.push(item);
         }
+        setData(list);
     }
+
+    const getData = () => {
+        const offset = (page - 1) * limit;
+        return data && data.slice(offset, offset + limit);
+      };
+      
 
 
     useEffect(()=>{
@@ -67,6 +78,6 @@ export default function ProductSteps(){
         {key: "dNamn", type:"read", title:"Delnamn"},
     ]
     return(
-        <ItemTable data={data} fields={fields}/>
+        <ItemTable data={getData} fields={fields} page={page} setPage={setPage} limit={limit} setLimit={setLimit} />
     )
 }
