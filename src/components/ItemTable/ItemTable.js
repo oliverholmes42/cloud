@@ -116,90 +116,100 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd }) {
   
   
 
-  return (<>
-  <div style={{display: "flex", padding: "10px", justifyContent: "space-between"}}>
-        <button  className="hoverable desktop" onClick={goToAdd}>Skapa ny</button>
-        <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd}/>
-        <SearchBar onSearch={search}/>
+  return (
+    <>
+      <div style={{ display: "flex", padding: "10px", justifyContent: "space-between" }}>
+        <button className="hoverable desktop" onClick={goToAdd}>Skapa ny</button>
+        <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd} />
+        <SearchBar onSearch={search} />
       </div>
-    <table className={`${styles.table} desktop`} cellPadding="10" cellSpacing="0">
-      <thead>
-        <tr>
-          {fields.map((field, index) => (
-            !field.advanced &&(
-            <th key={index} className={styles.th}>
-              {field.title.toUpperCase()}
-            </th>)
-          ))}
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredData.map((item, index) => (
-          index === selectedRow ? (
-            <EditTableRow
-              key={index}
-              item={item}
-              fields={fields}
-              onSave={(updatedItem) => {
-                onSave(updatedItem);
-                setSelectedRow(null); // Exit edit mode after saving
-              }}
-              onDelete={(id) => {
-                onDelete(id);
-                setSelectedRow(null); // Exit edit mode after deleting
-              }}
-              onEdit={()=>EditInMobile(item)}
-            />
-          ) : (
-            <tr
-              key={index}
-              onClick={() => setSelectedRow(index)}
-              className={index % 2 === 0 ? '' : styles.oddRow}
-            >
-              {fields.map((field, fieldIndex) => (
-                !field.advanced&&
-                <td key={fieldIndex} className={styles.td}>
-                  {formatValue(getNestedValue(item, field.key), field)}
-                </td>
-
-              ))}
-              <td></td>
-            </tr>
-          )
-        ))}
-      </tbody>
-    </table>
-    <div className='mobile'>
-      {filteredData.map((item, fieldIndex) => (
-        <div key={fieldIndex} className={`${styles.mobileItem} block`} onClick={()=>EditInMobile(item)}>
-          {/* Render the fields in two columns */}
-            <div className={styles.mobileColumn}>
-              {/* First Column: 1, 2, 3 */}
-              {mobileFields
-                .filter(field => field.mobile <= 3)
-                .map((field) => (
-                  <div key={field.key}>
-                    {field.mobile === 1 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
-                    {field.mobile === 2 && <h4 style={{color: "var(--darkAccent)"}}>{formatValue(getNestedValue(item, field.key), field)}</h4>}
-                    {field.mobile === 3 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
-                  </div>
-                ))}
-            </div>
-            <div className={styles.mobileColumn}>
-              {/* Second Column: 4, 5 */}
-              {mobileFields
-                .filter(field => field.mobile > 3)
-                .map((field) => (
-                  <div key={field.key}>
-                    {field.mobile === 4 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
-                    {field.mobile === 5 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
-                  </div>
-                ))}
-            </div>
+      {filteredData.length === 0 ? ( // Check if data is empty
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          Loading...
         </div>
-      ))}
-    </div>
+      ) : (
+        <>
+          <table className={`${styles.table} desktop`} cellPadding="10" cellSpacing="0">
+            <thead>
+              <tr>
+                {fields.map((field, index) => (
+                  !field.advanced && (
+                    <th key={index} className={styles.th}>
+                      {field.title.toUpperCase()}
+                    </th>
+                  )
+                ))}
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((item, index) => (
+                index === selectedRow ? (
+                  <EditTableRow
+                    key={index}
+                    item={item}
+                    fields={fields}
+                    onSave={(updatedItem) => {
+                      onSave(updatedItem);
+                      setSelectedRow(null); // Exit edit mode after saving
+                    }}
+                    onDelete={(id) => {
+                      onDelete(id);
+                      setSelectedRow(null); // Exit edit mode after deleting
+                    }}
+                    onEdit={() => EditInMobile(item)}
+                  />
+                ) : (
+                  <tr
+                    key={index}
+                    onClick={() => setSelectedRow(index)}
+                    className={index % 2 === 0 ? '' : styles.oddRow}
+                  >
+                    {fields.map((field, fieldIndex) => (
+                      !field.advanced &&
+                      <td key={fieldIndex} className={styles.td}>
+                        {formatValue(getNestedValue(item, field.key), field)}
+                      </td>
+                    ))}
+                    <td></td>
+                  </tr>
+                )
+              ))}
+            </tbody>
+          </table>
+          <div className="mobile">
+            {filteredData.map((item, fieldIndex) => (
+              <div key={fieldIndex} className={`${styles.mobileItem} block`} onClick={() => EditInMobile(item)}>
+                {/* Render the fields in two columns */}
+                <div className={styles.mobileColumn}>
+                  {/* First Column: 1, 2, 3 */}
+                  {mobileFields
+                    .filter(field => field.mobile <= 3)
+                    .map((field) => (
+                      <div key={field.key}>
+                        {field.mobile === 1 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                        {field.mobile === 2 && <h4 style={{ color: "var(--darkAccent)" }}>{formatValue(getNestedValue(item, field.key), field)}</h4>}
+                        {field.mobile === 3 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
+                      </div>
+                    ))}
+                </div>
+                <div className={styles.mobileColumn}>
+                  {/* Second Column: 4, 5 */}
+                  {mobileFields
+                    .filter(field => field.mobile > 3)
+                    .map((field) => (
+                      <div key={field.key}>
+                        {field.mobile === 4 && <h3>{formatValue(getNestedValue(item, field.key), field)}</h3>}
+                        {field.mobile === 5 && <h5>{formatValue(getNestedValue(item, field.key), field)}</h5>}
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
+  
 }

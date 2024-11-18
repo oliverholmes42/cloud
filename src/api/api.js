@@ -122,3 +122,71 @@ export async function  saveUser(token, location,data) {
             console.log(txt);
         });
 }
+
+export async function fetchSteps(token, location) {
+    const prm = {
+        req: "pos.pos_plumenu.plumenus",
+        avd: "01",
+        token: token,
+        sid: location,
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => {
+            console.log(ret);
+            return ret.rca; // Ensure the result is properly returned
+        })
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or handle the error as required
+        });
+}
+
+export async function fetchProducts(token, location, limit = 100, offset = 0){
+    const prm = {
+        req: "pos.pos_plu.plus",
+        avd: "01",
+        token: token,
+        sid: location,
+        limit: limit,
+        offset: offset
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => {
+            console.log(ret);
+            return ret.rco; // Ensure the result is properly returned
+        })
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or handle the error as required
+        });
+}
+
+export async function fetchProducts_ft(token, location, from, too){
+    const prm = {
+        req: "pos.pos_plu.plus_ft",
+        avd: "01",
+        token: token,
+        sid: location,
+        fplu: from,
+        tplu: too
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => {
+            console.log(ret);
+            return ret.rca; // Ensure the result is properly returned
+        })
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or handle the error as required
+        });
+}
+
