@@ -25,7 +25,13 @@ export default function Products() {
   },[page, limit])
 
   
-  const fields = [{key: ["plu00", "p0namn"], type: "text", title: "Namn"}];
+  const fields = [
+    {key: ["plu00", "p0katnr"], type: "read", title: "PLU"},
+    {key: ["plu02", "p2vgrupp"], type: "read", title: "Varugrupp"},
+    {key: ["plu00", "p0pris"], type: "number", title: "Pris", format:{ type: "number", decimals: 2, suffix: " kr"}},
+    {key: ["plu00", "p0namn"], type: "text", title: "Namn", format: {language: "SWE"}},
+    {key: ["plu00", "p0moms"], type: "read", title: "Moms", format: {type: "number", prefix: "MOMS ", suffix: "%"}},
+    {key: ["plu00", "p0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}];
 
 
   return (<>

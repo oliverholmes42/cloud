@@ -72,67 +72,157 @@ export default function EditTableRow({ item, fields, onSave, onDelete, onEdit })
         save();
       }
     };
-
-    if (field.type === 'read') {
-      return <span>{value}</span>;
-    }
-
+  
     switch (field.type) {
       case 'text':
         return (
-            <input
-                type="text"
-                value={value}
-                onChange={(e) => handleInputChange(e, field)}
-                ref={index === 0 ? ref : null}
-                onKeyDown={handleKeyDown}
-            />
+          <input
+            type="text"
+            value={value || ''}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+            placeholder={field.placeholder || ''}
+          />
         );
-      case 'number':
-        return (
-            <input
-                type="number"
-                value={value}
-                onChange={(e) => handleInputChange(e, field)}
-                ref={index === 0 ? ref : null}
-                onKeyDown={handleKeyDown}
-            />
-        );
-      case 'select':
-        const format = field.format;
-        const multiple = (format && format.multiple) || false;
+  
+        case 'number':
+  const parseNumber = (value) => {
+    const decimals = field.format?.decimals || 0; // Use optional chaining to safely access decimals
+    if (typeof value === 'string') {
+      const strippedValue = value.replace(/^0+/, '') || '0';
+      const integerPart = strippedValue.slice(0, -decimals) || '0'; // Integer part
+      const decimalPart = strippedValue.slice(-decimals).padStart(decimals, '0'); // Decimal part
+      return parseFloat(`${integerPart}.${decimalPart}`);
+    } else if (typeof value === 'number') {
+      return value / Math.pow(10, decimals); // Convert to decimal
+    }
+    return NaN; // Invalid value
+  };
 
+  const formatNumber = (value) => {
+    const decimals = field.format?.decimals || 0; // Use optional chaining to safely access decimals
+    if (isNaN(value)) return '';
+    return value.toFixed(decimals);
+  };
+
+  const formattedValue = formatNumber(parseNumber(value));
+
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <input
+        type="text"
+        value={formattedValue || ''}
+        onChange={(e) => {
+          let rawValue = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+          if (rawValue === '') rawValue = '0'; // Handle empty input as "0"
+
+          const decimals = field.format?.decimals || 0; // Safely access decimals
+          rawValue = rawValue.padStart(decimals + 1, '0'); // Pad raw value for decimals
+
+          handleInputChange({ target: { value: rawValue } }, field); // Update form data
+        }}
+        ref={index === 0 ? ref : null}
+        onKeyDown={handleKeyDown}
+        style={{ flex: 1 }}
+      />
+      {field.format?.suffix && <span style={{ marginLeft: "5px" }}>{field.format.suffix}</span>}
+    </div>
+  );
+
+      case 'date':
+        const formattedDate =
+          typeof value === 'string' && value.length === 6
+            ? `20${value.slice(0, 2)}-${value.slice(2, 4)}-${value.slice(4, 6)}`
+            : value;
+  
+        return (
+          <input
+            type="date"
+            value={formattedDate || ''}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+          />
+        );
+  
+      case 'select':
+        const multiple = field.format && field.format.multiple;
+  
         if (multiple) {
           return (
-              <DropDown options={field.options} onChange={handleMultiChange} value={value} name={field.key} onSave={save} />
+            <DropDown
+              options={field.options}
+              onChange={(value) => handleMultiChange(field.key, value)}
+              value={value || []}
+              name={field.key}
+              onSave={save}
+            />
           );
         } else {
           return (
-              <select value={value} onChange={(e) => handleInputChange(e, field)} onKeyDown={handleKeyDown}>
-                {field.options.map((option, index) => {
-                  const optionValue = option.id || option.value || option;
-                  const optionName = option.name || option.title || option;
-                  return (
-                      <option key={index} value={optionValue}>
-                        {optionName}
-                      </option>
-                  );
-                })}
-              </select>
+            <select
+              value={value || ''}
+              onChange={(e) => handleInputChange(e, field)}
+              onKeyDown={handleKeyDown}
+            >
+              {field.options.map((option, idx) => (
+                <option key={idx} value={option.id || option.value}>
+                  {option.name || option.title || option}
+                </option>
+              ))}
+            </select>
           );
         }
+  
+      case 'percentage':
+        const rawPercentage = typeof value === 'number' ? (value * 100).toFixed(2) : value;
+  
+        return (
+          <input
+            type="number"
+            value={rawPercentage || ''}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+            step={0.01}
+            placeholder="Enter percentage"
+          />
+        );
+  
+      case 'substring':
+        if (field.format.substring && value) {
+          const [start, end] = field.format.substring;
+          const substringValue = value.toString().substring(start, end);
+          return (
+            <input
+              type="text"
+              value={substringValue || ''}
+              onChange={(e) => handleInputChange(e, field)}
+              ref={index === 0 ? ref : null}
+              onKeyDown={handleKeyDown}
+            />
+          );
+        }
+        return null;
+  
+      case 'read':
+        return <span>{value}</span>;
+  
       default:
         return (
-            <input
-                type="text"
-                value={value}
-                onChange={(e) => handleInputChange(e, field)}
-                ref={index === 0 ? ref : null}
-                onKeyDown={handleKeyDown}
-            />
+          <input
+            type="text"
+            value={value || ''}
+            onChange={(e) => handleInputChange(e, field)}
+            ref={index === 0 ? ref : null}
+            onKeyDown={handleKeyDown}
+          />
         );
     }
   };
+  
+  
 
   return (
       <tr>

@@ -39,7 +39,20 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
         let value = e.target.value;
 
         if (field.type === 'number') {
-            value = parseFloat(value) || 0; // Convert to float, handle empty or invalid input
+            const parseNumber = (value) => {
+                const decimals = field.format?.decimals || 0; // Default to 0 decimals
+                if (typeof value === 'string') {
+                    const strippedValue = value.replace(/^0+/, '') || '0';
+                    const integerPart = strippedValue.slice(0, -decimals) || '0'; // Integer part
+                    const decimalPart = strippedValue.slice(-decimals).padStart(decimals, '0'); // Decimal part
+                    return parseFloat(`${integerPart}.${decimalPart}`);
+                } else if (typeof value === 'number') {
+                    return value / Math.pow(10, decimals); // Convert to decimal
+                }
+                return NaN; // Invalid value
+            };
+
+            value = parseNumber(value) || 0; // Format the number correctly
         }
 
         const updatedFormData = { ...formData };
@@ -103,12 +116,22 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
                                     />
                                 )}
                                 {field.type === "number" && (
-                                    <input
-                                        type="number"
-                                        value={getNestedValue(formData, field.key) || ""}
-                                        onChange={(e) => handleInputChange(e, field)}
-                                    />
-                                )}
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <input
+      type="text"
+      value={
+        !isNaN(Number(getNestedValue(formData, field.key))) // Check if the value is a number
+          ? Number(getNestedValue(formData, field.key)).toFixed(field.format?.decimals || 0) // Format the number
+          : "" // Default to an empty string if the value is not a number
+      }
+      onChange={(e) => handleInputChange(e, field)}
+    />
+    {field.format?.suffix && (
+      <span style={{ marginLeft: "5px" }}>{field.format.suffix}</span>
+    )}
+  </div>
+)}
+
                                 {field.type === "select" && !field.format?.multiple && (
                                     <select
                                         value={getNestedValue(formData, field.key) || ""}
@@ -160,11 +183,16 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
                                                 />
                                             )}
                                             {field.type === "number" && (
-                                                <input
-                                                    type="number"
-                                                    value={getNestedValue(formData, field.key) || ""}
-                                                    onChange={(e) => handleInputChange(e, field)}
-                                                />
+                                                <div style={{ display: "flex", alignItems: "center" }}>
+                                                    <input
+                                                        type="text"
+                                                        value={getNestedValue(formData, field.key)?.toFixed(field.format?.decimals || 0) || ""}
+                                                        onChange={(e) => handleInputChange(e, field)}
+                                                    />
+                                                    {field.format?.suffix && (
+                                                        <span style={{ marginLeft: "5px" }}>{field.format.suffix}</span>
+                                                    )}
+                                                </div>
                                             )}
                                             {field.type === "select" && !field.format?.multiple && (
                                                 <select

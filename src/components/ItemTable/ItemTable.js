@@ -34,10 +34,33 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     if (!format) return value;
 
     // Handle number formatting with decimals, prefix, and suffix
-    if (format.type === 'number' && typeof value === 'number') {
-      const formattedValue = value.toFixed(format.decimals || 0);
-      return `${format.prefix || ''}${formattedValue}${format.suffix || ''}`;
+    if (format.type === 'number') {
+      let numericValue;
+    
+      // Check if the value is a string and try to parse it as a number
+      if (typeof value === 'string') {
+        // Remove leading zeros, then ensure it's at least "0.00" format
+        const strippedValue = value.replace(/^0+/, '') || '0';
+        const integerPart = strippedValue.slice(0, -2) || '0'; // Everything except the last two digits
+        const decimalPart = strippedValue.slice(-2).padStart(2, '0'); // Last two digits as decimals
+        numericValue = parseFloat(`${integerPart}.${decimalPart}`);
+      } else if (typeof value === 'number') {
+        numericValue = value / 100; // Directly convert to decimals
+      } else {
+        numericValue = NaN; // Invalid value
+      }
+    
+      if (!isNaN(numericValue)) {
+        const formattedValue = numericValue.toFixed(format.decimals || 0);
+        return `${format.prefix || ''}${formattedValue}${format.suffix || ''}`;
+      } else {
+        console.warn('Value could not be converted to a valid number:', value);
+        return `${format.prefix || ''}${format.suffix || ''}`; // Return just the prefix and suffix if invalid
+      }
     }
+    
+    
+    
 
     // Handle percentage formatting
     if (format.type === 'percentage' && typeof value === 'number') {
@@ -47,9 +70,28 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
 
     // Handle date formatting
     if (format.type === 'date' && value) {
-      const dateValue = new Date(value);
-      return dateValue.toLocaleDateString(format.locale || 'en-US', format.options || {});
+      // Handle input format like "240528"
+      if (typeof value === 'string' && value.length === 6) {
+        const year = `20${value.slice(0, 2)}`; // Extract year and add "20" prefix
+        const month = value.slice(2, 4); // Extract month
+        const day = value.slice(4, 6); // Extract day
+        return `${year}-${month}-${day}`; // Return formatted string
+      } else {
+        console.warn('Invalid date format:', value);
+        return null; // Return null for invalid inputs
+      }
     }
+
+    if (format.language === "SWE" && value){
+        const string = value.toString().toswe();
+        return string;
+    }
+
+    if(format.substring && value){
+      return value.toString().substring(format.substring[0], format.substring[1])
+    }
+    
+    
 
     if (format.type === 'select') {
       // Handle single number case

@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import data from '../../data/categories.json';
 import ItemTable from '../../components/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
 import AddItem from '../ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
+import { fetchProductGroup } from '../../api/api';
+import { AuthContext } from '../../AuthContext';
 
 export default function Categories(){
     const [tableData, setTableData] = useState(data);
+    const {token, location} = useContext(AuthContext);
     const {push} = useStack();
 
-    const fields = [
+    const fetchData = async () => {
+      setTableData(null);
+      try {
+          const result = await fetchProductGroup(token, location.location.sid);
+          setTableData(result)
+      } catch (error) {
+          console.error("Error fetching:", error);
+      }
+  };
+  
+    useEffect(()=>{
+      fetchData();
+    },[])
+
+    const field = [
         {key: 'name',title: 'Namn', type: 'text', mobile: 1 },
         {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 } },
         {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'],mobile: 2 },
@@ -28,6 +45,19 @@ export default function Categories(){
           format: { type: 'date', locale: 'en-GB', options: { year: 'numeric', month: 'long', day: 'numeric' } } // Date formatting
         }
       ];
+
+    const fields = [
+      {key: "v0katnr", type: "read", title: "ID"},
+      {key: "v0text", type: "text", title: "Namn", format:{language: "SWE"}},
+      {key: "v0kontonr1", type: "number", title: "Konto 1", advanced: "Konto"},
+      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
+      {key: "v0kontonr2", type: "number", title: "Konto 2", advanced: "Konto"},
+      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [2,4]}},
+      {key: "v0kontonr3", type: "number", title: "Konto 3", advanced: "Konto"},
+      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [4,6]}},
+      {key: "v0ordn", type: "number", title: "sortering"},
+      {key: "v0upddat", type: "read", title: "Uppdaterad", format: {type: "date"}}
+    ]
 
       const handleSave = (updatedItem) => {
         setTableData((prevData) =>

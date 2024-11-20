@@ -1,6 +1,30 @@
 import * as net from './lib/net';
 import sso from './sso';
 
+String.prototype.toswe = function() {
+    var sv = this;
+    sv = sv.replace(/\|/g,"ö");
+    sv = sv.replace(/\#/g,"Ö");
+    sv = sv.replace(/\\/g,"Ö");
+    sv = sv.replace(/\{/g,"ä");
+    sv = sv.replace(/\[/g,"Ä");
+    sv = sv.replace(/\}/g,"å");
+    sv = sv.replace(/\]/g,"Å");
+    sv = sv.replace(/\s+$/,"");
+    return sv;
+  }
+  
+  String.prototype.fromswe = function() {
+    var sv = this;
+    sv = sv.replace(/\ö/g,"|");
+    sv = sv.replace(/\Ö/g,"\\");
+    sv = sv.replace(/\ä/g,"{");
+    sv = sv.replace(/\Ä/g,"[");
+    sv = sv.replace(/\å/g,"}");
+    sv = sv.replace(/\Å/g,"]");
+    return sv;
+  }
+
 export async function loginToken() {
     const uid = "pitchersorebro@kund.svepos.se";
     let pwd = "pub2024";
@@ -191,4 +215,59 @@ export async function fetchProducts_ft(token, location, from, too){
             return null; // Return null or handle the error as required
         });
 }
+
+function formatDateToYYYYMMDD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+export function fetchProductGroup(token, location) {
+    
+    const prm = {
+        req: "pos.pos_pg.vgrps",
+        token: token,
+        sid: location,
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rco) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchWeekStat(token, location, tdate, fdate) {
+    const toDate = new Date(tdate);
+    
+    // If tdate is not provided, calculate it as 7 days before fdate
+    const fromDate = fdate ? new Date(fdate) : new Date(toDate);
+    if (!fdate) {
+        fromDate.setDate(toDate.getDate() - 6);
+    }
+
+    const prm = {
+        req: "pos.pos_eko.rev_period",
+        avd: "01",
+        token: token,
+        sid: location,
+        fdat: fromDate.toISOString().split('T')[0],
+        tdat: toDate.toISOString().split('T')[0]
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rca) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+
 
