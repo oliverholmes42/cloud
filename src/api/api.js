@@ -241,6 +241,26 @@ export function fetchProductGroup(token, location) {
         });
 }
 
+export function SaveProductGroup(token, location, obj) {
+    
+    const prm = {
+        req: "pos.pos_pg.vgrp_upd",
+        token: token,
+        sid: location,
+        var00: obj.var00,
+        var03: obj.var03
+    };
+
+    console.log("Fetching stats with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.ok) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
 export function fetchWeekStat(token, location, tdate, fdate) {
     const toDate = new Date(tdate);
     

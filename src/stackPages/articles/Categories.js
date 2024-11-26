@@ -4,7 +4,7 @@ import ItemTable from '../../components/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
 import AddItem from '../ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
-import { fetchProductGroup } from '../../api/api';
+import { fetchProductGroup, SaveProductGroup } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
 
 export default function Categories(){
@@ -47,22 +47,23 @@ export default function Categories(){
       ];
 
     const fields = [
-      {key: "v0katnr", type: "read", title: "ID"},
-      {key: "v0text", type: "text", title: "Namn", format:{language: "SWE"}},
-      {key: "v0kontonr1", type: "number", title: "Konto 1", advanced: "Konto"},
-      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
-      {key: "v0kontonr2", type: "number", title: "Konto 2", advanced: "Konto"},
-      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [2,4]}},
-      {key: "v0kontonr3", type: "number", title: "Konto 3", advanced: "Konto"},
-      {key: "v0moms", type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [4,6]}},
-      {key: "v0ordn", type: "number", title: "sortering"},
-      {key: "v0upddat", type: "read", title: "Uppdaterad", format: {type: "date"}}
+      {key: ["var00", "v0katnr"], type: "read", title: "ID"},
+      {key: ["var00","v0text"], type: "text", title: "Namn", format:{language: "SWE"}},
+      {key: ["var00","v0kontonr1"], type: "number", title: "Konto 1", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
+      {key: ["var00","v0kontonr2"], type: "number", title: "Konto 2", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [2,4]}},
+      {key: ["var00","v0kontonr3"], type: "number", title: "Konto 3", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [4,6]}},
+      {key: ["var00","v0ordn"], type: "number", title: "sortering"},
+      {key: ["var00","v0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}
     ]
 
-      const handleSave = (updatedItem) => {
-        setTableData((prevData) =>
-          prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
-        );
+      const handleSave = async (updatedItem) => {
+        const reponse = await SaveProductGroup(token, location.location.sid, updatedItem);
+        if(reponse === "000"){
+          console.log("success")
+        }
       };
     
       const handleDelete = (id) => {
