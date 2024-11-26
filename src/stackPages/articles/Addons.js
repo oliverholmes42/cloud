@@ -4,19 +4,20 @@ import ItemTable from '../../components/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
 import AddItem from '../ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
-import { fetchProductGroup, SaveProductGroup } from '../../api/api';
+import { fetchAddons } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
 
-export default function Categories(){
-    const [tableData, setTableData] = useState(data);
+export default function Addons(){
+    const [tableData, setTableData] = useState([]);
     const {token, location} = useContext(AuthContext);
     const {push} = useStack();
 
     const fetchData = async () => {
       setTableData(null);
       try {
-          const result = await fetchProductGroup(token, location.location.sid);
+          const result = await fetchAddons(token, location.location.sid);
           setTableData(result)
+          console.log(result);
       } catch (error) {
           console.error("Error fetching:", error);
       }
@@ -28,7 +29,7 @@ export default function Categories(){
 
     const field = [
         {key: 'name',title: 'Namn', type: 'text', mobile: 1 },
-        {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 },mobile: 2},
+        {key: 'tax', title: 'Moms',type: 'number', format: { type: 'percentage', decimals: 2 } },
         {key: 'type',title: 'Typ',type: 'select', options: ['Dryck', 'Mat'],mobile: 2 },
         {key: 'visibility', title: 'Synlighet',type: 'select',options: ['Synlig', 'Dold'], format: 'select', mobile: 4},
         {key: 'ticket',title: 'Bongplats',type: 'select', options: ticketScreens, format: {type: 'select', multiple: true},mobile: 3},
@@ -47,23 +48,14 @@ export default function Categories(){
       ];
 
     const fields = [
-      {key: ["var00", "v0katnr"], type: "read", title: "ID"},
-      {key: ["var00","v0text"], type: "text", title: "Namn", format:{language: "SWE"}},
-      {key: ["var00","v0kontonr1"], type: "number", title: "Konto 1", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
-      {key: ["var00","v0kontonr2"], type: "number", title: "Konto 2", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [2,4]}},
-      {key: ["var00","v0kontonr3"], type: "number", title: "Konto 3", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [4,6]}},
-      {key: ["var00","v0ordn"], type: "number", title: "sortering"},
-      {key: ["var00","v0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}
+      {key: "id", type: "read", title: "ID", mobile:1},
+      {key: "text", type: "text", title: "Namn", format:{language: "SWE"},mobile:2}
     ]
 
-      const handleSave = async (updatedItem) => {
-        const reponse = await SaveProductGroup(token, location.location.sid, updatedItem);
-        if(reponse === "000"){
-          console.log("success")
-        }
+      const handleSave = (updatedItem) => {
+        setTableData((prevData) =>
+          prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+        );
       };
     
       const handleDelete = (id) => {
@@ -77,13 +69,15 @@ export default function Categories(){
 
     return(
       <>
+          {
           <ItemTable
-        fields={fields}
-        data={tableData}
-        onSave={handleSave}
-        onDelete={handleDelete}
-        onAdd={handleAdd}
-      />
+              fields={fields}
+              data={tableData}
+              onSave={handleSave}
+
+
+          /> }
+          {/*tableData && tableData.map((item,index) => (console.log(item))) */}
     </>
     )
 }

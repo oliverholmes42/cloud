@@ -116,9 +116,15 @@ export default function Dash() {
     "#FF6666",
   ];
 
+  useEffect(()=>{
+    fetchWeek();
+  },[])
+
+
   return (
     <>
       <h1 style={{ textAlign: "center" }}>Översikt</h1>
+      {/*
       <input
         type="date"
         value={date}
@@ -126,7 +132,7 @@ export default function Dash() {
       />
       <button onClick={fetcho}>Hämta data</button>
       <button onClick={fetchWeek}>Hämta vecka</button>
-
+      */}
       <div
         style={{
           display: "flex",
