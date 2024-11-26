@@ -269,5 +269,116 @@ export function fetchWeekStat(token, location, tdate, fdate) {
         });
 }
 
+export function fetchAddons(token, location) {
 
+    const prm = {
+        req: "pos.pos_prds.addons",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
 
+    console.log("Fetching addons with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rca) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchHappyhour(token, location) {
+
+    const prm = {
+        req: "pos.pos_prm.prm_happy",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
+
+    console.log("Fetching addons with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rco) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchTax(token, location) {
+
+    const prm = {
+        req: "pos.pos_tax.taxes",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
+
+    console.log("Fetching taxes with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.raa) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchCurrency(token, location) {
+
+    const prm = {
+        req: "pos.pos_cur.cur",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
+
+    console.log("Fetching taxes with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rca) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchPays(token, location) {
+
+    const prm = {
+        req: "pos.pos_pay.qs_pay",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
+
+    console.log("Fetching pays with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret.rca) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function fetchBQ_bqn(token, location) {
+
+    const prm = {
+        req: "pos.pos_bq.bqn",
+        token: token,
+        sid: location,
+        avd: "01",
+    };
+
+    console.log("Fetching pays with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}

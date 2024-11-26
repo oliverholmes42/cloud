@@ -1,28 +1,27 @@
 import {useContext, useEffect, useState} from "react";
 import ItemTable from "../../components/ItemTable/ItemTable";
-import data from "../../data/taxCodes.json"
 import { useStack } from "../../StackContext";
-import {fetchProductGroup, fetchTax} from "../../api/api";
+import {fetchCurrency, fetchTax} from "../../api/api";
 import { AuthContext } from '../../AuthContext';
 
-export default function TaxCodes(){
-    const [tableData, setTableData] = useState(data); // Manage the table data for editing
+export default function Currency(){
+    const [tableData, setTableData] = useState([]); // Manage the table data for editing
     const {token, location} = useContext(AuthContext);
     const {push} = useStack();
 
     const fields = [
-        {key: ["mom00","m0kod"],title: "Kod", type: "read", mobile: 1 },
-        {key: ["mom00","m0txt"],title: "Namn", type: "read", mobile: 2 },
-        {key: ["mom00","m0moms"], title: "Moms", type: "read", format: { type: 'percentage', decimals: 2 }, mobile: 4},
-        {key: ["mom00","m0konto"], title: "Konto", type: "text", mobile: 3},
-        { key: ["mom00","m0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date', locale: 'sv-SE' } },
+        {key: ["val00","v0kod"],title: "PLU", type: "read", mobile: 1 },
+        {key: ["val00","v0txt"],title: "Text", type: "read", mobile: 2 },
+        {key: ["val00","v0pris"], title: "Pris", type: "read", format:{type: "currency"}, mobile: 4},
+        {key: ["val00","v0relativ"], title: "Varugrupp", type: "text", mobile: 3},
+        { key: ["val00","v0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date', locale: 'sv-SE' } },
 
     ]
 
     const fetchData = async () => {
         setTableData(null);
         try {
-            const result = await fetchTax(token, location.location.sid);
+            const result = await fetchCurrency(token, location.location.sid);
             setTableData(result)
             console.log(result);
         } catch (error) {

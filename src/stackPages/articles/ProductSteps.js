@@ -24,7 +24,7 @@ export default function ProductSteps(){
 
     const getProducts = async () => {
         try {
-            const result = await fetchProducts(token, location.location.sid);
+            const result = await fetchProducts(token, location.location.sid,5000);
             setProducts(result);
         } catch (error) {
             console.error("Error fetching Steps:", error);
