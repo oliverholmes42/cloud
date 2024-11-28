@@ -1,0 +1,70 @@
+.receipt {
+    font-family: 'Courier New', monospace; /* Typical receipt font */
+    font-size: 13px; /* Common font size for receipts */
+    font-weight: bold;
+    background: white;
+    color: black;
+    padding: 10px;
+    margin: 20px auto;
+    max-width: 320px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.big {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.centre {
+    text-align: center;
+}
+
+.inline {
+    display: flex;
+    justify-content: space-between;
+}
+
+.columns {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.column p {
+    width: 100%;
+}
+
+.items {
+    margin: 15px 0 15px 15px;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed #ccc;
+    margin: 10px 0;
+}
+
+.itemName{
+    width: 50%;
+}
+
+.itemTotal{
+    width: 20%;
+    text-align: right;
+}
+
+.right{
+    text-align: right;
+}
+
+.receipt p {
+    line-height: 1.5;
+}

@@ -9,10 +9,11 @@ import { useStack } from "../StackContext";
 import InvoicePage from "../navPages/InvoicePage";
 import IntegrationPage from "../navPages/IntegrationPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faBoxesStacked, faCashRegister, faChevronLeft, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBoxesStacked, faCashRegister, faChartSimple, faChevronLeft, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
 import PlaceholderPage from "../stackPages/PlaceholderPage";
 import HardWarePage from "../navPages/HardWarePage";
 import AdminPage from "../navPages/AdminPage";
+import ReportsPage from "../navPages/ReportsPage";
 
 export const routes = [
     [
@@ -24,6 +25,9 @@ export const routes = [
         { title: "Fakturor", page: <InvoicePage />, icon: faFileLines },
         {title: "Hårdvara", page: <HardWarePage/>, icon: faCashRegister}
         
+    ],
+    [
+        {title: "Rapporter", page: <ReportsPage/>, icon: faChartSimple}
     ],
     [
         {title: "Administration", page: <AdminPage/>, icon: faUserTie },

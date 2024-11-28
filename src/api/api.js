@@ -13,7 +13,7 @@ String.prototype.toswe = function() {
     sv = sv.replace(/\s+$/,"");
     return sv;
   }
-  
+
   String.prototype.fromswe = function() {
     var sv = this;
     sv = sv.replace(/\ö/g,"|");
@@ -224,7 +224,7 @@ function formatDateToYYYYMMDD(date) {
 }
 
 export function fetchProductGroup(token, location) {
-    
+
     const prm = {
         req: "pos.pos_pg.vgrps",
         token: token,
@@ -242,7 +242,7 @@ export function fetchProductGroup(token, location) {
 }
 
 export function SaveProductGroup(token, location, obj) {
-    
+
     const prm = {
         req: "pos.pos_pg.vgrp_upd",
         token: token,
@@ -263,7 +263,7 @@ export function SaveProductGroup(token, location, obj) {
 
 export function fetchWeekStat(token, location, tdate, fdate) {
     const toDate = new Date(tdate);
-    
+
     // If tdate is not provided, calculate it as 7 days before fdate
     const fromDate = fdate ? new Date(fdate) : new Date(toDate);
     if (!fdate) {
@@ -402,3 +402,44 @@ export function fetchBQ_bqn(token, location) {
             return null; // Return null or throw error based on your error handling preference
         });
 }
+
+export function fetchReceiptList(token, location){
+    const prm = {
+        req: "pos.pos_eko.invh_list",
+        token: token,
+        sid: location,
+        avd: "01",
+        fdat: "24-11-24",
+        tdat: "24-11-25"
+    };
+
+    console.log("Fetching pays with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+export function cop(token, location){
+    const prm = {
+        req: "pos.pos_eko.receipt_force_copy",
+        token: token,
+        sid: location,
+        avd: "01",
+        datum: "241124",
+        notanr: "099513E"
+    };
+
+    console.log("Fetching pays with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
