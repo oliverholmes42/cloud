@@ -54,6 +54,9 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
 
             value = parseNumber(value) || 0; // Format the number correctly
         }
+        if(field.type === 'text'){
+            value.fromswe()
+        }
 
         const updatedFormData = { ...formData };
         setNestedValue(updatedFormData, field.key, value);
@@ -108,9 +111,10 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
                             <div key={field.key} className={styles.FormGroup}>
                                 <label className="label">{field.title}</label>
                                 {field.type === "text" && (
+
                                     <input
                                         type="text"
-                                        value={getNestedValue(formData, field.key) || ""}
+                                        value={getNestedValue(formData, field.key).toswe() || ""}
                                         onChange={(e) => handleInputChange(e, field)}
                                         ref={ref}
                                     />
@@ -138,8 +142,8 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
                                         onChange={(e) => handleInputChange(e, field)}
                                     >
                                         {field.options.map((option, index) => (
-                                            <option key={index} value={option}>
-                                                {option === true ? "Yes" : option === false ? "No" : option}
+                                            <option key={index} value={option.id}>
+                                                {option.name}
                                             </option>
                                         ))}
                                     </select>

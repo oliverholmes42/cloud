@@ -82,7 +82,7 @@ export default function EditTableRow({
   };
 
   const renderInput = (field, value, index) => {
-    
+
     const handleKeyDown = (e) => {
       if (e.key === "Enter") {
         save();
@@ -91,8 +91,8 @@ export default function EditTableRow({
 
     switch (field.type) {
       case "text":
-        
-        const val = field.format.language === "SWE" ? value.toString().toswe() : value;
+
+        const val =  value.toString().toswe() ?? value;
         return (
           <input
             type="text"

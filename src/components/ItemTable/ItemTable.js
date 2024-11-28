@@ -37,7 +37,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     // Handle number formatting with decimals, prefix, and suffix
     if (format.type === 'number') {
       let numericValue;
-    
+
       // Check if the value is a string and try to parse it as a number
       if (typeof value === 'string') {
         // Remove leading zeros, then ensure it's at least "0.00" format
@@ -50,7 +50,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
       } else {
         numericValue = NaN; // Invalid value
       }
-    
+
       if (!isNaN(numericValue)) {
         const formattedValue = numericValue.toFixed(format.decimals || 0);
         return `${format.prefix || ''}${formattedValue}${format.suffix || ''}`;
@@ -59,9 +59,9 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
         return `${format.prefix || ''}${format.suffix || ''}`; // Return just the prefix and suffix if invalid
       }
     }
-    
-    
-    
+
+
+
 
     // Handle percentage formatting
     if (format.type === 'percentage' && typeof value === 'number') {
@@ -83,7 +83,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
       }
     }
 
-    if (format.language === "SWE" && value){
+    if (format.type === 'text'){
         const string = value.toString().toswe();
         return string;
     }
@@ -91,18 +91,18 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     if(format.substring && value){
       return value.toString().substring(format.substring[0], format.substring[1])
     }
-    
-    
+
+
 
     if (format.type === 'select') {
 
       if (Array.isArray(value) && value.length > 0) {
         const firstItem = field.options.find(item => item.id === value[0]);
-        
+
         if (!firstItem) {
           return 'Inga';  // If first item not found, return default "Inga"
         }
-        
+
         const valuesLeft = value.length - 1;
         return valuesLeft > 0 ? `${firstItem.name} +${valuesLeft}` : firstItem.name;
       }
@@ -111,23 +111,23 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
         return formattedValue ? formattedValue.name : 'Unknown';  // Return name or fallback if not found
       }
       // Handle single number case
-      
-      
-      
+
+
+
       // Handle array case
-      
-      
+
+
       return 'Inga';  // Return default if the array is empty or not an array
     }
-    
+
     return value; // Default return if no formatting applies
   };
 
   const EditInMobile = (item) => {
     const page = (
-      <ItemForm 
+      <ItemForm
         initialData={item}   // Pass the item data for editing
-        fields={fields} 
+        fields={fields}
         onSubmit={onSave}    // Use onSave for editing
         isEditMode={true}    // Set edit mode to true
         onDelete={onDelete}  // Pass the delete function
@@ -135,24 +135,24 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     );
     push({ page, title: "Redigera" });
   }
-  
+
   const goToAdd = () => {
     const page = (
       <ItemForm
-        fields={fields} 
+        fields={fields}
         onSubmit={onAdd}    // Use onAdd for creating a new item
         isEditMode={false}  // Set edit mode to false for adding
       />
     );
     push({ page, title: "Lägg Till Ny" });
   }
-  
+
   const search = (query) => {
     if(query.length > 1){
     setFilteredData((prevData) => {
       // Filter the previous data based on the query
       return prevData.filter(item =>
-        
+
         item.name.toLowerCase().includes(query.toLowerCase())
       );
     });}
@@ -178,10 +178,10 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     }
   }
 
-  
 
-  
-  
+
+
+
 
   return (
     <>
@@ -303,7 +303,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
                   key={index}
                   onDoubleClick={() => setSelectedRow(index)}
                   className={index % 2 === 0 ? '' : styles.oddRow}
-                  
+
 
                 >
                   {fields.map((field, fieldIndex) => (
@@ -314,8 +314,8 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
                     )
                   ))}
                   <td>
-                  <input 
-                      type='checkbox' 
+                  <input
+                      type='checkbox'
                       onChange={(e) => {
                         e.target.checked
                           ? setMulti((prev) => [...prev, index]) // Add index to the array
@@ -366,6 +366,6 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
       </div>
     </>
   );
-  
-  
+
+
 }
