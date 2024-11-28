@@ -24,13 +24,19 @@ export default function Products() {
     fetchData();
   },[page, limit])
 
+  const moms = [{id: "00", name: "Momsfritt"},
+    {id: "01", name: "Moms 25%"},
+    {id: "02", name: "Moms 12%"},
+    {id: "03", name: "Moms 6%"}
+  ]
+
   
   const fields = [
     {key: ["plu00", "p0katnr"], type: "read", title: "PLU"},
     {key: ["plu02", "p2vgrupp"], type: "read", title: "Varugrupp"},
     {key: ["plu00", "p0pris"], type: "number", title: "Pris", format:{ type: "number", decimals: 2, suffix: " kr"}},
     {key: ["plu00", "p0namn"], type: "text", title: "Namn", format: {language: "SWE"}},
-    {key: ["plu00", "p0moms"], type: "read", title: "Moms", format: {type: "number", prefix: "MOMS ", suffix: "%"}},
+    {key: ["plu00", "p0moms"], type: "select", title: "Moms", format:{type: "select"}, options: moms},
     {key: ["plu00", "p0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}];
 
 
@@ -42,6 +48,7 @@ export default function Products() {
         setPage={setPage}
         limit={limit}
         setLimit={setLimit}
+        onSave={console.log}
       />
     </>
   );

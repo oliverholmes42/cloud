@@ -16,6 +16,7 @@ export function getNestedValue (obj, key){
 // Custom table component
 export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page, setPage, limit, setLimit }) {
   const [selectedRow, setSelectedRow] = useState(null); // State to track the selected row
+  const [multi, setMulti] = useState([]);
   const {push} = useStack();
   const [filteredData, setFilteredData] = useState(data);
   const [inputPage, setInputPage] = useState(page);
@@ -94,13 +95,7 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
     
 
     if (format.type === 'select') {
-      // Handle single number case
-      if (typeof value === 'number') {
-        const formattedValue = field.options.find(item => item.id === value);
-        return formattedValue ? formattedValue.name : 'Unknown';  // Return name or fallback if not found
-      }
-      
-      // Handle array case
+
       if (Array.isArray(value) && value.length > 0) {
         const firstItem = field.options.find(item => item.id === value[0]);
         
@@ -111,6 +106,16 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
         const valuesLeft = value.length - 1;
         return valuesLeft > 0 ? `${firstItem.name} +${valuesLeft}` : firstItem.name;
       }
+      else{
+        const formattedValue = field.options.find(item => item.id === value);
+        return formattedValue ? formattedValue.name : 'Unknown';  // Return name or fallback if not found
+      }
+      // Handle single number case
+      
+      
+      
+      // Handle array case
+      
       
       return 'Inga';  // Return default if the array is empty or not an array
     }
@@ -296,8 +301,10 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
               ) : (
                 <tr
                   key={index}
-                  onClick={() => setSelectedRow(index)}
+                  onDoubleClick={() => setSelectedRow(index)}
                   className={index % 2 === 0 ? '' : styles.oddRow}
+                  
+
                 >
                   {fields.map((field, fieldIndex) => (
                     !field.advanced && (
@@ -306,7 +313,17 @@ export default function ItemTable({ fields, data, onSave, onDelete, onAdd, page,
                       </td>
                     )
                   ))}
-                  <td></td>
+                  <td>
+                  <input 
+                      type='checkbox' 
+                      onChange={(e) => {
+                        e.target.checked
+                          ? setMulti((prev) => [...prev, index]) // Add index to the array
+                          : setMulti((prev) => prev.filter((item) => item !== index)); // Remove index from the array
+                      }}
+                    />
+
+                  </td>
                 </tr>
               )
             ))

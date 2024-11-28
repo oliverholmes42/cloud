@@ -47,6 +47,8 @@
 }
 
 
+
+
 /* Hover effect on rows */
 tr:hover {
     background-color: var(--accent);

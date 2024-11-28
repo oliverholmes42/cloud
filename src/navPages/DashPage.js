@@ -75,6 +75,7 @@ export default function Dash() {
         day: getWeekdayName(thisWeekData.wday), // Day of the week
         thisWeek: thisWeekData.tot, // Total for this week
         lastWeek: lastWeekData.tot, // Total for last week
+        difference: thisWeek.tot - lastWeek.tot
       });
     }
 
@@ -101,11 +102,6 @@ export default function Dash() {
     }
   }
 
-  const minSales = Math.min(
-    ...mergedData.flatMap((item) =>
-      [item.sales1, item.sales2].filter((val) => val !== null)
-    )
-  );
   const COLORS = [
     "#0088FE",
     "#00C49F",
@@ -163,20 +159,25 @@ export default function Dash() {
         </ResponsiveContainer>
 
         {/* AreaChart with transparency */}
-        <ResponsiveContainer width={300} height={200}>
+        <ResponsiveContainer width={400} height={200}>
           <AreaChart
-            data={mergedData}
+            data={weeks}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
-            <YAxis domain={[minSales, "auto"]} />{" "}
+            <YAxis
+              domain={[0, "auto"]}
+              tickFormatter={(value) =>
+                `${(value / 100000).toLocaleString("sv-SE")}kkr`
+              }
+            />
             {/* Start Y-axis from the minimum sales */}
             <Tooltip />
             <Legend />
             <Area
               type="monotone"
-              dataKey="sales1"
+              dataKey="lastWeek"
               stroke="#8884d8"
               fill="#8884d8"
               fillOpacity={0.3}
@@ -184,7 +185,7 @@ export default function Dash() {
             />
             <Area
               type="monotone"
-              dataKey="sales2"
+              dataKey="thisWeek"
               stroke="#82ca9d"
               fill="#82ca9d"
               fillOpacity={0.3}
