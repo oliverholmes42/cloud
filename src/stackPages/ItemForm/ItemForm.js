@@ -190,7 +190,7 @@ export default function ItemForm({ fields, initialData = {}, onSubmit, isEditMod
                                                 <div style={{ display: "flex", alignItems: "center" }}>
                                                     <input
                                                         type="text"
-                                                        value={getNestedValue(formData, field.key)?.toFixed(field.format?.decimals || 0) || ""}
+                                                        value={Number(getNestedValue(formData, field.key))?.toFixed(field.format?.decimals || 0) || ""}
                                                         onChange={(e) => handleInputChange(e, field)}
                                                     />
                                                     {field.format?.suffix && (
