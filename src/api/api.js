@@ -3,27 +3,30 @@ import sso from './sso';
 
 String.prototype.toswe = function() {
     var sv = this;
-    sv = sv.replace(/\|/g,"ö");
-    sv = sv.replace(/\#/g,"Ö");
-    sv = sv.replace(/\\/g,"Ö");
-    sv = sv.replace(/\{/g,"ä");
-    sv = sv.replace(/\[/g,"Ä");
-    sv = sv.replace(/\}/g,"å");
-    sv = sv.replace(/\]/g,"Å");
-    sv = sv.replace(/\s+$/,"");
+    sv = sv.replace(/\|/g, "ö");
+    sv = sv.replace(/\#/g, "Ö");
+    sv = sv.replace(/\\/g, "Ö");
+    sv = sv.replace(/\{/g, "ä");
+    sv = sv.replace(/\[/g, "Ä");
+    sv = sv.replace(/\}/g, "å");
+    sv = sv.replace(/\]/g, "Å");
+    sv = sv.replace(/�/g, "Ö"); // Map '�' to 'Ö'
+    sv = sv.replace(/\s+$/, ""); // Remove trailing whitespace
     return sv;
-  }
+};
 
-  String.prototype.fromswe = function() {
+String.prototype.fromswe = function() {
     var sv = this;
-    sv = sv.replace(/\ö/g,"|");
-    sv = sv.replace(/\Ö/g,"\\");
-    sv = sv.replace(/\ä/g,"{");
-    sv = sv.replace(/\Ä/g,"[");
-    sv = sv.replace(/\å/g,"}");
-    sv = sv.replace(/\Å/g,"]");
+    sv = sv.replace(/ö/g, "|");
+    sv = sv.replace(/Ö/g, "\\");
+    sv = sv.replace(/ä/g, "{");
+    sv = sv.replace(/Ä/g, "[");
+    sv = sv.replace(/å/g, "}");
+    sv = sv.replace(/Å/g, "]");
+    sv = sv.replace(/Ö/g, "�"); // Map 'Ö' back to '�'
     return sv;
-  }
+};
+
 
 export async function loginToken() {
     const uid = "pitchersorebro@kund.svepos.se";
@@ -425,12 +428,12 @@ export function fetchReceiptList(token, location){
 
 export function cop(token, location){
     const prm = {
-        req: "pos.pos_eko.receipt_force_copy",
+        req: "pos.pos_red.red_skv_nota",
         token: token,
         sid: location,
         avd: "01",
         datum: "241124",
-        notanr: "099513E"
+        notanr: "099430E"
     };
 
     console.log("Fetching pays with parameters:", prm);

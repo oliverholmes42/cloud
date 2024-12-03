@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import data from '../../data/categories.json';
-import ItemTable from '../../components/ItemTable/ItemTable';
+import ItemTable from '../../components/items/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
-import AddItem from '../ItemForm/ItemForm';
+import AddItem from '../../components/items/ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
 import {fetchAddons, fetchHappyhour} from '../../api/api';
 import { AuthContext } from '../../AuthContext';
@@ -23,7 +23,7 @@ export default function Happyhour(){
           console.error("Error fetching:", error);
       }
   };
-  
+
     useEffect(()=>{
       fetchData();
     },[])
@@ -37,7 +37,7 @@ export default function Happyhour(){
         {
           key: 'created_at',
           title: 'Skapades',
-          type: 'read', 
+          type: 'read',
           format: { type: 'date', locale: 'en-GB', options: { year: 'numeric', month: 'long', day: 'numeric' } } // Date formatting
         },
         {
@@ -69,7 +69,7 @@ export default function Happyhour(){
           prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
         );
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };
@@ -77,7 +77,7 @@ export default function Happyhour(){
       const handleAdd = (newItem) => {
         console.log(newItem)
       };
-      
+
 
     return(
       <>

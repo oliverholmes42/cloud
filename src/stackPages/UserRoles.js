@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { fetchUsers } from "../api/api";
 import { AuthContext } from "../AuthContext";
-import ItemTable from "../components/ItemTable/ItemTable";
+import ItemTable from "../components/items/ItemTable/ItemTable";
 
 export default function UserRoles() {
     const [data, setData] = useState([]);

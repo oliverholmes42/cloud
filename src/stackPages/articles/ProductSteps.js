@@ -1,17 +1,25 @@
 import { useContext, useEffect, useState } from "react";
 import { fetchProducts, fetchSteps } from "../../api/api";
 import { AuthContext } from "../../AuthContext";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 
-export default function ProductSteps(){
+export default function ProductSteps() {
     const [steps, setSteps] = useState([]);
     const [products, setProducts] = useState([]);
     const [data, setData] = useState(null);
 
-    const {token, location} = useContext(AuthContext);
+    const { token, location } = useContext(AuthContext);
 
     const [limit, setLimit] = useState(100);
     const [page, setPage] = useState(1);
+
+    const courses = [
+        "Ingen",
+        "Förrätt",
+        "Varmrätt",
+        "Efterrätt",
+        "Take-Away",
+    ]; // Static courses array
 
     const getSteps = async () => {
         try {
@@ -24,81 +32,79 @@ export default function ProductSteps(){
 
     const getProducts = async () => {
         try {
-            const result = await fetchProducts(token, location.location.sid,5000);
-            setProducts(result);
+            const result = await fetchProducts(token, location.location.sid, 5000);
+            const transformedProducts = result.map((product) => ({
+                id: product.plu00.p0katnr,
+                name: product.plu00.p0namn,
+                barcode: product.plu00.p0brkod,
+            }));
+            setProducts(transformedProducts);
         } catch (error) {
-            console.error("Error fetching Steps:", error);
+            console.error("Error fetching Products:", error);
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         getProducts();
         getSteps();
-    },[])
-
-    useEffect(()=>{
-        console.log(products[0])
-    },[products])
+    }, []);
 
     const createData = () => {
-        const list = [];
-        for(let i = 0; i< steps.length;i++){
-            const plunr = steps[i].plunr
-            const plunrdel = steps[i].plunrdel
-            const item = {
-                plunr,
-                plunrdel 
+        const list = steps.map((step) => {
+            const plunrProduct = products.find(
+                (product) => product.id === step.plunr
+            );
+            const plunrdelProduct = products.find(
+                (product) => product.id === step.plunrdel
+            );
+
+            return {
+                plunr: step.plunr,
+                plunrdel: step.plunrdel,
+                hNamn: plunrProduct?.name || "Unknown",
+                p0brkod: plunrProduct?.barcode || "Unknown",
+                ratt1: courses[plunrProduct?.barcode || 0],
+                dNamn: plunrdelProduct?.name || "Unknown",
+                p0brkod2: plunrdelProduct?.barcode || "Unknown",
+                ratt2: courses[plunrdelProduct?.barcode || 0],
             };
-            for(let j = 0; j<products.length; j++){
-                if(products[j].plu00.p0katnr==plunr){
-                    item.hNamn = products[j].plu00.p0namn;
-                    item.p0brkod  = products[j].plu00.p0brkod;
-                    item.ratt1 = courses[item.p0brkod];
-                }
-                if(products[j].plu00.p0katnr==plunrdel){
-                    item.dNamn = products[j].plu00.p0namn;
-                    item.p0brkod2  = products[j].plu00.p0brkod;
-                    item.ratt2 = courses[item.p0brkod2]
-                }
-            }
-            list.push(item);
-        }
+        });
+
         setData(list);
-    }
+    };
+
+    useEffect(() => {
+        if (products.length > 0 && steps.length > 0) {
+            createData();
+        }
+    }, [products, steps]);
 
     const getData = () => {
         const offset = (page - 1) * limit;
-        return data && data.slice(offset, offset + limit);
-      };
-      
-
-
-    useEffect(()=>{
-        if(products.length>0 && steps.length>0){
-            createData();
-        }
-    },[products, steps])
-
-    const courses = ["Ingen","Förrätt", "Varmrätt", "Efterrätt", "Take-Away"]
-    /*const courses = [
-        {value: 0, name: "Ingen"}, 
-        {value: 1, name: "Förrätt"}, 
-        {value: 2, name: "Varmrätt" }, 
-        {value: 3, name: "Efterrätt"}, // Corrected key
-        {value: 4, name: "Take-Away"}
-      ];*/
-      
+        return data ? data.slice(offset, offset + limit) : [];
+    };
 
     const fields = [
-        {key: "plunr", type:"text", title:"Huvudprodukt"},
-        {key: "hNamn", type:"read", title:"Huvudnamn"},
-        {key: "ratt1", type: "read", title: "Rätt"},
-        {key: "plunrdel", type:"select", title:"Subprodukt"},
-        {key: "dNamn", type:"read", title:"Delnamn"},
-        {key: "ratt2", type: "read", title: "Rätt"}
-        
-    ]
-    return(
-        <ItemTable data={getData} fields={fields} page={page} setPage={setPage} limit={limit} setLimit={setLimit} />
-    )
+        { key: "plunr", type: "read", title: "Huvudprodukt" },
+        { key: "hNamn", type: "read", title: "Huvudnamn" },
+        { key: "ratt1", type: "read", title: "Rätt" },
+        {
+            key: "plunrdel",
+            type: "select",
+            title: "Subprodukt",
+            format: { type: "single", options: products },
+        },
+        { key: "ratt2", type: "read", title: "Rätt" },
+    ];
+
+    return (
+        <ItemTable
+            data={getData()}
+            fields={fields}
+            page={page}
+            setPage={setPage}
+            limit={limit}
+            setLimit={setLimit}
+        />
+    );
 }

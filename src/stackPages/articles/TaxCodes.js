@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 import data from "../../data/taxCodes.json"
 import { useStack } from "../../StackContext";
 import {fetchProductGroup, fetchTax} from "../../api/api";
@@ -15,7 +15,7 @@ export default function TaxCodes(){
         {key: ["mom00","m0txt"],title: "Namn", type: "read", mobile: 2 },
         {key: ["mom00","m0moms"], title: "Moms", type: "read", format: { type: 'percentage', decimals: 2 }, mobile: 4},
         {key: ["mom00","m0konto"], title: "Konto", type: "text", mobile: 3},
-        { key: ["mom00","m0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date', locale: 'sv-SE' } },
+        { key: ["mom00","m0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date'} },
 
     ]
 
@@ -39,7 +39,7 @@ export default function TaxCodes(){
           prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
         );
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };

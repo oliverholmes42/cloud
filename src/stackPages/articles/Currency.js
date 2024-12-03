@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 import { useStack } from "../../StackContext";
 import {fetchCurrency, fetchTax} from "../../api/api";
 import { AuthContext } from '../../AuthContext';
@@ -14,7 +14,7 @@ export default function Currency(){
         {key: ["val00","v0txt"],title: "Text", type: "read", mobile: 2 },
         {key: ["val00","v0pris"], title: "Pris", type: "read", format:{type: "currency"}, mobile: 4},
         {key: ["val00","v0relativ"], title: "Varugrupp", type: "text", mobile: 3},
-        { key: ["val00","v0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date', locale: 'sv-SE' } },
+        { key: ["val00","v0upddat"], title: 'Uppdaterat', type: 'read', format: { type: 'date'} },
 
     ]
 
@@ -38,7 +38,7 @@ export default function Currency(){
           prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
         );
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };

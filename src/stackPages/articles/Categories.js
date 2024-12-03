@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import data from '../../data/categories.json';
-import ItemTable from '../../components/ItemTable/ItemTable';
+import ItemTable from '../../components/items/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
-import AddItem from '../ItemForm/ItemForm';
+import AddItem from '../../components/items/ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
 import { fetchProductGroup, SaveProductGroup } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
@@ -21,7 +21,7 @@ export default function Categories(){
           console.error("Error fetching:", error);
       }
   };
-  
+
     useEffect(()=>{
       fetchData();
     },[])
@@ -35,7 +35,7 @@ export default function Categories(){
         {
           key: 'created_at',
           title: 'Skapades',
-          type: 'read', 
+          type: 'read',
           format: { type: 'date', locale: 'en-GB', options: { year: 'numeric', month: 'long', day: 'numeric' } } // Date formatting
         },
         {
@@ -49,13 +49,13 @@ export default function Categories(){
     const fields = [
       {key: ["var00", "v0katnr"], type: "read", title: "ID"},
       {key: ["var00","v0text"], type: "text", title: "Namn", format:{language: "SWE"}},
-      {key: ["var00","v0kontonr1"], type: "number", title: "Konto 1", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
-      {key: ["var00","v0kontonr2"], type: "number", title: "Konto 2", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [2,4]}},
-      {key: ["var00","v0kontonr3"], type: "number", title: "Konto 3", advanced: "Konto"},
-      {key: ["var00","v0moms"], type: "number", title: "Moms 1", advanced: "Konto", format: {substring: [4,6]}},
-      {key: ["var00","v0ordn"], type: "number", title: "sortering"},
+      {key: ["var00","v0kontonr1"], type: "text", title: "Konto 1", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "text", title: "Moms 1", advanced: "Konto", format: {substring: [0,2]}},
+      {key: ["var00","v0kontonr2"], type: "text", title: "Konto 2", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "text", title: "Moms 2", advanced: "Konto", format: {substring: [2,4]}},
+      {key: ["var00","v0kontonr3"], type: "text", title: "Konto 3", advanced: "Konto"},
+      {key: ["var00","v0moms"], type: "text", title: "Moms 3", advanced: "Konto", format: {substring: [4,6]}},
+      {key: ["var00","v0ordn"], type: "number", title: "sortering", format: {decimals: 0}},
       {key: ["var00","v0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}
     ]
 
@@ -65,7 +65,7 @@ export default function Categories(){
           console.log("success")
         }
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };
@@ -73,7 +73,7 @@ export default function Categories(){
       const handleAdd = (newItem) => {
         console.log(newItem)
       };
-      
+
 
     return(
       <>

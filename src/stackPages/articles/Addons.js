@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import data from '../../data/categories.json';
-import ItemTable from '../../components/ItemTable/ItemTable';
+import ItemTable from '../../components/items/ItemTable/ItemTable';
 import { useStack } from '../../StackContext';
-import AddItem from '../ItemForm/ItemForm';
+import AddItem from '../../components/items/ItemForm/ItemForm';
 import ticketScreens from '../../data/ticketScreens.json';
 import { fetchAddons } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
@@ -22,7 +22,7 @@ export default function Addons(){
           console.error("Error fetching:", error);
       }
   };
-  
+
     useEffect(()=>{
       fetchData();
     },[])
@@ -36,7 +36,7 @@ export default function Addons(){
         {
           key: 'created_at',
           title: 'Skapades',
-          type: 'read', 
+          type: 'read',
           format: { type: 'date', locale: 'en-GB', options: { year: 'numeric', month: 'long', day: 'numeric' } } // Date formatting
         },
         {
@@ -48,8 +48,8 @@ export default function Addons(){
       ];
 
     const fields = [
-      {key: "id", type: "read", title: "ID", mobile:1},
-      {key: "text", type: "text", title: "Namn", format:{language: "SWE"},mobile:2}
+      {key: "id", type: "read", title: "ID", mobile:3},
+      {key: "text", type: "text", title: "Namn", format:{language: "SWE"},mobile:1}
     ]
 
       const handleSave = (updatedItem) => {
@@ -57,7 +57,7 @@ export default function Addons(){
           prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
         );
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };
@@ -65,7 +65,7 @@ export default function Addons(){
       const handleAdd = (newItem) => {
         console.log(newItem)
       };
-      
+
 
     return(
       <>

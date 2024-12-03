@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 import { fetchInvoiceCustomers } from "../../api/api";
 import { AuthContext } from "../../AuthContext";
 

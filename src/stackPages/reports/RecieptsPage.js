@@ -1,35 +1,26 @@
 import { useContext, useEffect, useState } from "react";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 import {cop, copyReceipt, fetchReceiptList} from "../../api/api";
 import { AuthContext } from "../../AuthContext";
 import Receipt from "../../components/Reciept/Receipt";
 
 export default function RecieptsPage(){
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(null);
     const {token, location} = useContext(AuthContext);
 
     const fetchData = async () => {
-        const response = await fetchReceiptList(token, location.location.sid)
-        setData(response.rca)
+        const response = await cop(token, location.location.sid)
+        setData(response.rco)
     }
 
-    const copy = async () => {
-        const response = await cop(token, location.location.sid)
-        console.log(response)
-    }
     useEffect(()=>{
         fetchData();
     },[])
 
-    const fields = [
-        {}
-    ]
     return(<>
-            <h1>HEllo</h1>
-            <button onClick={copy}>Copy</button>
 
             {
-                data.length>0 && <Receipt data={data[3]}/>
+                data && <Receipt data={data}/>
             }
 
 

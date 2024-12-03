@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import ItemTable from "../../components/ItemTable/ItemTable";
+import ItemTable from "../../components/items/ItemTable/ItemTable";
 import { useStack } from "../../StackContext";
 import {fetchBQ_bqn, fetchPays, fetchTax} from "../../api/api";
 import { AuthContext } from '../../AuthContext';
@@ -39,7 +39,7 @@ export default function Bongs(){
           prevData.map((item) => (item.id === updatedItem.id ? updatedItem : item))
         );
       };
-    
+
       const handleDelete = (id) => {
         setTableData((prevData) => prevData.filter((item) => item.id !== id));
       };

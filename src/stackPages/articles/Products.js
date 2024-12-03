@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import ItemTable from '../../components/ItemTable/ItemTable';
+import ItemTable from '../../components/items/ItemTable/ItemTable';
 import { fetchProducts } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
 
@@ -32,11 +32,11 @@ export default function Products() {
 
 
   const fields = [
-    {key: ["plu00", "p0katnr"], type: "read", title: "PLU"},
+    {key: ["plu00", "p0katnr"], type: "read", title: "PLU", mobile: 2},
     {key: ["plu02", "p2vgrupp"], type: "read", title: "Varugrupp"},
-    {key: ["plu00", "p0pris"], type: "number", title: "Pris", format:{ type: "number", decimals: 2, suffix: " kr"}},
-    {key: ["plu00", "p0namn"], type: "text", title: "Namn", format: {language: "SWE"}},
-    {key: ["plu00", "p0moms"], type: "select", title: "Moms", format:{type: "select", options:moms}, options: moms},
+    {key: ["plu00", "p0pris"], type: "number", title: "Pris", format:{ type: "currency"}, mobile: 4},
+    {key: ["plu00", "p0namn"], type: "text", title: "Namn", format: {language: "SWE"}, mobile: 1},
+    {key: ["plu00", "p0moms"], type: "select", title: "Moms", format:{type: "single", options:moms}, mobile: 5},
     {key: ["plu00", "p0upddat"], type: "read", title: "Uppdaterad", format: {type: "date"}}];
 
 
