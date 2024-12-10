@@ -1,52 +1,65 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 import styles from './LoginPage.module.css';
+import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import data from '../data/pLoc.json';
 
 export default function LocationPage() {
     const { logout, putLocation } = useContext(AuthContext);
-    const locations = [
-        { id: 91356735131, name: 'The Green Tavern', sid: "S0009999" },
-        { id: 91356735132, name: 'Pitchers Örebro', sid: "S0002462" }
-    ];
 
-    const sections = [
-        { id: 61374724, name: 'Main Bar', locationID: 91356735131 },
-        { id: 61374725, name: 'Outdoor Patio', locationID: 91356735131 },
-        { id: 61374726, name: 'VIP Lounge', locationID: 91356735132 },
-        { id: 61374727, name: 'Rooftop Bar', locationID: 91356735132 },
-        { id: 61374728, name: 'Private Dining Room', locationID: 91356735132 }
-    ];
+    // Transform locations and sections into options for react-select
+    const locationOptions = data.locations.map((loc) => ({
+        value: loc,
+        label: loc.name,
+    }));
 
     const [formData, setFormData] = useState({
-        location: locations[0].id, // Store only the ID
-        section: sections[0].id
+        location: locationOptions[0]?.value || null,
+        section: data.sections.find(
+            (section) => section.locationID === locationOptions[0]?.value.id
+        ) || null,
     });
-    const [error, setError] = useState(false);
 
-    const handleChange = (e) => {
-        setError(false);
-        const { name, value } = e.target;
+    const sectionOptions = formData.location
+        ? data.sections
+            .filter((section) => section.locationID === formData.location.id)
+            .map((section) => ({
+                value: section,
+                label: section.id + " : " + section.name,
+            }))
+        : [];
+
+    const handleLocationChange = (selectedOption) => {
         setFormData((prevData) => ({
             ...prevData,
-            [name]: parseInt(value) // Store as an integer
+            location: selectedOption?.value || null,
+            section: data.sections.find(
+                (section) => section.locationID === selectedOption?.value?.id
+            ) || null,
+        }));
+    };
+
+    const handleSectionChange = (selectedOption) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            section: selectedOption?.value || null,
         }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const locationObj = locations.find(loc => loc.id === formData.location);
-        const sectionObj = sections.find(sec => sec.id === formData.section);
 
-        if (!locationObj || !sectionObj) {
-            setError(true);
+        if (!formData.location || !formData.section) {
+            alert("Please select both a location and a section.");
         } else {
-            putLocation({ location: locationObj, section: sectionObj }); // Pass full objects
+            putLocation({
+                location: formData.location,
+                section: formData.section,
+            });
         }
     };
-
-    const filteredSections = sections.filter(section => section.locationID === formData.location);
 
     return (
         <div className={styles.loginContainer}>
@@ -54,47 +67,41 @@ export default function LocationPage() {
             <form onSubmit={handleSubmit} className={styles.loginForm}>
                 <div className={styles.inputGroup}>
                     <label htmlFor="location">Location</label>
-                    <select
-                        id="location"
-                        name="location"
-                        value={formData.location}
-                        onChange={handleChange}
-                        className={styles.inputField}
-                    >
-                        {locations.map((item) => (
-                            <option key={item.id} value={item.id}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={locationOptions}
+                        value={
+                            formData.location
+                                ? { value: formData.location, label: formData.location.name }
+                                : null
+                        }
+                        onChange={handleLocationChange}
+                        placeholder="Select Location"
+                        className={styles.reactSelect}
+                    />
                 </div>
 
                 <div className={styles.inputGroup}>
                     <label htmlFor="section">Section</label>
-                    <select
-                        id="section"
-                        name="section"
-                        value={formData.section}
-                        onChange={handleChange}
-                        className={styles.inputField}
-                    >
-                        <option value="" disabled>Select a section</option>
-                        {filteredSections.map((section) => (
-                            <option key={section.id} value={section.id}>
-                                {section.name}
-                            </option>
-                        ))}
-                    </select>
+                    <Select
+                        options={sectionOptions}
+                        value={
+                            formData.section
+                                ? { value: formData.section, label: formData.section.name }
+                                : null
+                        }
+                        onChange={handleSectionChange}
+                        placeholder="Select Section"
+                        isDisabled={!formData.location} // Disable until a location is selected
+                        className={styles.reactSelect}
+                    />
                 </div>
 
                 <button type="submit" className={styles.loginButton}>
-                    Välj
+                    Confirm Selection
                 </button>
-                {error && <p className={styles.error}>Please select both a location and section.</p>}
             </form>
             <button onClick={logout} className={styles.logoutButton}>
-                Logga ut 
-                <FontAwesomeIcon icon={faRightToBracket} />
+                Logga ut <FontAwesomeIcon icon={faArrowRightFromBracket} />
             </button>
         </div>
     );

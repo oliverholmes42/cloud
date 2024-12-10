@@ -18,13 +18,13 @@ import ReportsPage from "../navPages/ReportsPage";
 export const routes = [
     [
         { title: "Översikt", page: <Dash />, icon: faGaugeHigh },
-        
+
     ],
     [
         { title: "Artiklar", page: <ProductPage/>, icon: faBoxesStacked },
         { title: "Fakturor", page: <InvoicePage />, icon: faFileLines },
         {title: "Hårdvara", page: <HardWarePage/>, icon: faCashRegister}
-        
+
     ],
     [
         {title: "Rapporter", page: <ReportsPage/>, icon: faChartSimple}
@@ -38,7 +38,7 @@ export const routes = [
 
 export default function Navbar({ setActive, active }) { // Add activePage prop
     const [expanded, setExpanded] = useState(false);
-    
+
     const items = routes;
 
     const {flush, stack} = useStack();
@@ -50,7 +50,7 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
     }
 
     const {logout, removeLocation, location} = useContext(AuthContext);
- 
+
 
     useEffect(() => {
         setActive(items[0][0].page); // Set first item from first section as default
@@ -61,8 +61,8 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
         const isActive = active === page.page;
 
         return (
-            <div 
-                onClick={() => navigate(page.page)} 
+            <div
+                onClick={() => navigate(page.page)}
                 className={`${styles.MenuItem} ${isActive ? styles.active : ''}`}>
                 <FontAwesomeIcon icon={page.icon} className={styles.icon} />
                 <p>{page.title}</p>
@@ -73,7 +73,8 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
     const renderNav = () => {
         return(
             <>
-                <img src={logo} alt={"Spaider"} className={`${styles.logo} desktop`} />
+                <div style={{height: "50px"}} className={'desktop'}>
+                </div>
             {items.map((section, sectionIndex) => (
                 <div key={sectionIndex} className={styles.Section}>
                     {section.map((item, index) => (
@@ -81,7 +82,6 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
                     ))}
                 </div>
             ))}
-            <button className={`hoverable ${styles.Logout}`} onClick={removeLocation}><FontAwesomeIcon icon={faChevronLeft} /> {location.location.name + " " + location.section.name} </button>
             </>
         )
     }
@@ -91,13 +91,20 @@ export default function Navbar({ setActive, active }) { // Add activePage prop
             {renderNav()}
         </div>
         <div className={`mobile ${styles.MobileThings}`}>
-            {expanded? 
-            <div className={`${styles.MobileNav}`}>
-                <FontAwesomeIcon icon={faX} size="2xl" onClick={()=>{setExpanded(false)}} className={styles.NavBarIcon}/>
-                {renderNav()}
-            </div>:
-            stack.length === 0 && <FontAwesomeIcon icon={faBars} size="2xl" onClick={()=>{setExpanded(true)}} className={styles.NavBarIcon} />}
-            
+            {expanded?
+                <div className={`${styles.MobileNav}`}>
+                    <FontAwesomeIcon icon={faX} size="2xl" onClick={() => {
+                        setExpanded(false)
+                    }} className={styles.NavBarIcon}/>
+                    {renderNav()}
+                    <button className={`hoverable ${styles.Logout}`} onClick={removeLocation}><FontAwesomeIcon
+                        icon={faChevronLeft}/> {location.location.name + " " + location.section.name} </button>
+
+                </div> :
+                stack.length === 0 && <FontAwesomeIcon icon={faBars} size="2xl" onClick={() => {
+                    setExpanded(true)
+                }} className={styles.NavBarIcon}/>}
+
         </div>
         </>
     );

@@ -406,14 +406,14 @@ export function fetchBQ_bqn(token, location) {
         });
 }
 
-export function fetchReceiptList(token, location){
+export function fetchReceiptList(token, location, fdat = "24-11-24", tdat = "24-11-25"){
     const prm = {
         req: "pos.pos_eko.invh_list",
         token: token,
         sid: location,
         avd: "01",
-        fdat: "24-11-24",
-        tdat: "24-11-25"
+        fdat: fdat,
+        tdat: tdat
     };
 
     console.log("Fetching pays with parameters:", prm);
@@ -426,14 +426,38 @@ export function fetchReceiptList(token, location){
         });
 }
 
-export function cop(token, location){
+export function fetchTransactionList(token, location, fdat = "24-11-24", tdat = "24-11-25"){
+    const prm = {
+        req: "pos.pos_trs.trs_per",
+        token: token,
+        sid: location,
+        avd: "01",
+        favd: "01",
+        tavd: "01",
+        fdat: fdat,
+        datum: fdat,
+        tdat: tdat
+    };
+
+    console.log("Fetching pays with parameters:", prm);
+
+    return net.sio_req(prm)
+        .then(ret => ret) // Return the result if successful
+        .catch(error => {
+            console.error("Error fetching stats:", error);
+            return null; // Return null or throw error based on your error handling preference
+        });
+}
+
+
+export function cop(token, location, datum = "241124", notanr = "099430E"){
     const prm = {
         req: "pos.pos_red.red_skv_nota",
         token: token,
         sid: location,
         avd: "01",
-        datum: "241124",
-        notanr: "099430E"
+        datum: datum,
+        notanr: notanr
     };
 
     console.log("Fetching pays with parameters:", prm);
@@ -445,4 +469,6 @@ export function cop(token, location){
             return null; // Return null or throw error based on your error handling preference
         });
 }
+
+
 

@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import ItemTable from '../../components/items/ItemTable/ItemTable';
 import { fetchProducts } from '../../api/api';
 import { AuthContext } from '../../AuthContext';
+import {faReceipt} from "@fortawesome/free-solid-svg-icons";
 
 export default function Products() {
   const [tableData, setTableData] = useState(null);
   const {token, location} = useContext(AuthContext);
   const [limit, setLimit] = useState(100);
   const [page, setPage]  = useState(1);
+  const [fDate, setFDate] = useState(new Date());
+  const [tDate, setTDate] = useState(new Date()-1);
 
   const fetchData = async () => {
     setTableData(null);
@@ -20,9 +23,23 @@ export default function Products() {
     }
 };
 
+  const action = () => {
+    console.log(fDate)
+    console.log(tDate)
+  }
+
+  //const customFunction = { title: "Kopiera", function: action}
+
   useEffect(()=>{
     fetchData();
-  },[page, limit])
+  },[page, limit, location])
+
+
+  const date = {
+    from : {value: fDate, set: setFDate},
+    to : {value: tDate, set: setTDate},
+    apply : action
+  };
 
   const moms = [{id: "00", name: "Momsfritt"},
     {id: "01", name: "Moms 25%"},
@@ -49,6 +66,8 @@ export default function Products() {
         limit={limit}
         setLimit={setLimit}
         onSave={console.log}
+        //customFunction={customFunction}
+        //date={date}
       />
     </>
   );

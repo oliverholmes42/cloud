@@ -6,6 +6,7 @@ import FloatingButton from "../../FloatingButton/FloatingButton";
 import { useStack } from "../../../StackContext";
 import ItemForm from "../ItemForm/ItemForm";
 import { getNestedValue, renderValue, renderLabel } from "../ItemUtil";
+import Modal from "../../Modal/Modal";
 
 export default function ItemTable({
                                     fields,
@@ -17,12 +18,18 @@ export default function ItemTable({
                                     setPage,
                                     limit,
                                     setLimit,
+                                    customFunction,
+                                    date,
+                                    canEdit = true,
+                                      canRemove= true,
                                   }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [multi, setMulti] = useState([]);
   const { push } = useStack();
   const [filteredData, setFilteredData] = useState(data);
   const [inputPage, setInputPage] = useState(page);
+  const [filterSearch, setFilterSearch] = useState(null);
+  const [filterValue, setFilterValue] = useState(null);
 
   useEffect(() => {
     setFilteredData(data);
@@ -35,6 +42,7 @@ export default function ItemTable({
   const mobileFields = fields.filter((field) => field.mobile).sort((a, b) => a.mobile - b.mobile);
 
   const editInMobile = (item) => {
+      if(!canEdit)return
     push({
       page: (
           <ItemForm
@@ -82,6 +90,83 @@ export default function ItemTable({
         }
     };
 
+    const doFilterSearch = () => {
+        console.log("Starting doFilterSearch with:", { filterSearch, filterValue });
+
+        if (!filterSearch || (!filterValue.f && !filterValue.t)) {
+            console.log("Invalid filterSearch or filterValue. Resetting data.");
+            setFilteredData(data);
+            return;
+        }
+
+        setFilteredData(() =>
+            data.filter((item, index) => {
+                const field = filterSearch;
+                if (!field) {
+                    console.error(`Field with key "${filterSearch}" not found.`);
+                    return false;
+                }
+
+                let rawValue = getNestedValue(item, field.key);
+                console.log(`Item ${index}: rawValue =`, rawValue);
+
+                if (rawValue === null || rawValue === undefined) return false;
+
+                let fromValue = filterValue.f?.trim() || null;
+                let toValue = filterValue.t?.trim() || null;
+
+                // Handle specific data types based on field format
+                if (field.format?.type === "currency") {
+                    fromValue = fromValue ? Number(Number(fromValue).fromCurrency()) : null;
+                    toValue = toValue ? Number(Number(toValue).fromCurrency()) : null;
+                } else if (field.format?.type === "number") {
+                    fromValue = fromValue ? Number(fromValue) : null;
+                    toValue = toValue ? Number(toValue) : null;
+                } else if (field.format?.type === "date") {
+                    fromValue = fromValue ? new Date(fromValue).getTime() : null;
+                    toValue = toValue ? new Date(toValue).getTime() : null;
+                    rawValue = new Date(rawValue).getTime();
+                } else {
+                    // Default to string comparison for text or untyped fields
+                    fromValue = fromValue?.toString().toLowerCase() || null;
+                    toValue = toValue?.toString().toLowerCase() || null;
+                    rawValue = rawValue.toString().toLowerCase();
+                }
+
+
+
+                // Check range or inclusion
+                if (fromValue !== null && toValue !== null) {
+                    return rawValue >= fromValue && rawValue <= toValue;
+                } else if (fromValue !== null) {
+                    return rawValue.includes(fromValue);
+                } else if (toValue !== null) {
+                    return rawValue.includes(toValue);
+                }
+
+                return false;
+            })
+        );
+
+        console.log("doFilterSearch complete.");
+    };
+
+
+
+
+
+
+    const DateSelect = () => {
+        if(!date)return;
+        return(
+            <div>
+                {date.from && <input type="date" value={date.from.value} onChange={(e) => date.from.set(e.target.value)} />}
+                {date.to && <input type="date" value={date.to.value} onChange={(e) => date.to.set(e.target.value)} />}
+                {date.apply && <button onClick={date.apply}>Apply</button>}
+            </div>
+        )
+    }
+
 
     const changePage = (change = inputPage) => {
         if(Number(limit) !== 10000){
@@ -105,6 +190,7 @@ export default function ItemTable({
           <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd}/>
           <SearchBar onSearch={search}/>
         </div>
+          <DateSelect/>
           {page && limit && (
               <div style={{ display: "flex", justifyContent: "space-between", padding: "10px", alignItems: "center" }}>
                   {/* Page Size Selector */}
@@ -178,11 +264,11 @@ export default function ItemTable({
                 (field, index) =>
                     !field.advanced && (
                         <th key={index} className={styles.th}>
-                          {renderLabel(field)}
+                          {renderLabel(field, setFilterSearch, setFilterValue)}
                         </th>
                     )
             )}
-            <th style={{width: "100px"}}></th>
+            <th style={{width: "180px"}}></th>
           </tr>
           </thead>
           <tbody>
@@ -211,6 +297,9 @@ export default function ItemTable({
                             setSelectedRow(null);
                           }}
                           onEdit={() => editInMobile(item)}
+                          customFunction={customFunction}
+                          edit={canEdit}
+                          canRemove={canRemove}
                       />
                   ) : (
                       <tr
@@ -222,7 +311,9 @@ export default function ItemTable({
                             (field, fieldIndex) =>
                                 !field.advanced && (
                                     <td key={fieldIndex} className={styles.td}>
-                                      {renderValue(field, getNestedValue(item, field.key))}
+                                      {
+                                          renderValue(field, getNestedValue(item, field.key))
+                                      }
                                     </td>
                                 )
                         )}
@@ -289,6 +380,41 @@ export default function ItemTable({
                   </div>
               ))}
         </div>
+          {
+              filterSearch && (
+                  <Modal closeModal={() => setFilterSearch(null)}>
+                      {filterValue?.f && (
+                          <div>
+                              <label htmlFor="filter-from">Från:</label>
+                              <input
+                                  id="filter-from"
+                                  onChange={(e) => setFilterValue({ ...filterValue, f: e.target.value })}
+                                  value={filterValue.f}
+                              />
+                          </div>
+                      )}
+                      {filterValue?.t && (
+                          <div>
+                              <label htmlFor="filter-to">Till:</label>
+                              <input
+                                  id="filter-to"
+                                  onChange={(e) => setFilterValue({ ...filterValue, t: e.target.value })}
+                                  value={filterValue.t}
+                              />
+                          </div>
+                      )}
+                      <button
+                          onClick={() => {
+                              console.log(filterValue);
+                              setFilterSearch(null);
+                              doFilterSearch()
+                          }}
+                      >
+                          Sök
+                      </button>
+                  </Modal>
+              )
+          }
 
 
       </>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StackContent, StackProvider, useStack } from "./StackContext";
 import Navbar from "./nav/NavBar";
 import styles from './Main.module.css';
+import Header from "./nav/Header";
 
 function AppContent({ active, setActive }) {
   const { stack } = useStack();
@@ -22,6 +23,7 @@ export default function Main() {
     <StackProvider>
       <div className={styles.App}>
         <Navbar setActive={setActive} active={active} className={styles.Navbar}/>
+        <Header/>
         <AppContent active={active} setActive={setActive} />
       </div>
     </StackProvider>

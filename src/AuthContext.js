@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
         if(storedToken){
             setToken(JSON.parse(storedToken))
         }
+
     }, []);
 
     // Login function to store user data
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         setToken(data);
         sessionStorage.setItem("token", JSON.stringify(data));
     }
-    
+
     const removeToken = () => {
         setToken(null);
         sessionStorage.removeItem("token");

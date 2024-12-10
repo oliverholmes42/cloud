@@ -2,6 +2,8 @@
 
 import React, { useRef } from "react";
 import toast from "react-hot-toast";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 export const setNestedValue = (obj, key, value) => {
     const keys = Array.isArray(key) ? key : key.split('.');
@@ -50,6 +52,9 @@ export const handleInputChange = (e, field, formData, setFormData) => {
 
 export const renderInput = (field, formData, setFormData, ref = null) => {
     const value = getNestedValue(formData, field.key) || "";
+    if (field.type === "read"){
+        return renderValue(field, value)
+    }
 
     if (field.type === "select" && field.format?.type === "single") {
         return (
@@ -89,10 +94,6 @@ export const renderInput = (field, formData, setFormData, ref = null) => {
         );
     }
 
-    if (field.type === "read"){
-       return renderValue(field, value)
-    }
-
     if (field.type === "text" && field.format?.substring){
         const sub = field.format.substring
         return(
@@ -126,11 +127,15 @@ export const renderValue = (field, value) => {
     if (!field || value === undefined || value === null) return "";
 
     const { format } = field;
+    if (format?.type === "currency") {
+        //console.log(value || 0)
+        return `${format?.prefix || ""}${(value||0).toString().toCurrency()}${format?.suffix || " kr"}`;
+    }
 
-    if (field.type === "number") {
-        if (format?.type === "currency") {
-            return `${format?.prefix || ""}${value.toCurrency()}${format?.suffix || ""}`;
-        }
+    if (format?.type === "link") {
+        return <a href={value} target="_blank" rel="noopener noreferrer">{format.title || "Öppna"}</a>
+    }
+    if (field.type === "number" || format?.type === "number") {
         const decimals = format?.decimals ?? 2;
         return `${format?.prefix || ""}${parseFloat(value).toFixed(decimals)}${format?.suffix || ""}`;
     }
@@ -176,6 +181,24 @@ export const renderValue = (field, value) => {
 };
 
 
-export const renderLabel = (field) => {
-    return field.title ? field.title.toUpperCase() : field.key.replace(/_/g, ' ').toUpperCase();
+export const renderLabel = (field, search, format) => {
+    // Render the label with optional search icon
+    const label = field.title
+        ? field.title.toUpperCase()
+        : field.key.replace(/_/g, ' ').toUpperCase();
+
+    const openSearch = async () => {
+        console.log(field)
+        if(field.search === 'span')await format({f:" ", t: " "})
+        else if(field.search === 'value')await format({f: " "})
+        await search(field)
+    }
+
+    return (
+        <div onClick={openSearch} className='hoverable icon'>
+
+            {label}
+            {field.search && <FontAwesomeIcon className={'hoverable icon'} icon={faMagnifyingGlass} style={{ marginLeft: '5px'}} />}
+        </div>
+    );
 };

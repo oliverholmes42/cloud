@@ -14,18 +14,21 @@
 }
 
 /* Styling for table headers */
-.th {
+.th div{
     background-color: var(--darkAccent);
     color: var(--white);
     font-weight: bold;
     text-align: left;
-    padding: 15px 10px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 0.9rem;
     white-space: nowrap; /* Prevent text from wrapping */
     overflow: hidden; /* Prevent content from overflowing */
     text-overflow: ellipsis; /* Adds ellipsis (...) if text is too long */
+}
+
+.th path{
+    color: var(--white);
 }
 
 /* Styling for table rows */

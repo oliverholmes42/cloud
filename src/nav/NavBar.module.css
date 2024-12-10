@@ -3,7 +3,6 @@
     min-width: 150px;
     min-height: 100vh;
     overflow: auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     text-align: center;
     position: sticky;
     top: 0;
@@ -15,7 +14,9 @@
 }
 
 .MobileThings{
-    width: 100%
+    width: 100%;
+    position: fixed;
+    z-index: 99;
 }
 
 .MobileNav{
@@ -57,7 +58,7 @@
 
 .Section {
     margin-bottom: 10px; /* Minimal spacing between sections */
-   
+
     background-color: var(--block); /* Clean, subtle background for sections */
 }
 

@@ -1,0 +1,12 @@
+{
+  "locations": [
+    { "id": 91356735131, "name": "The Green Tavern", "sid": "S0009999" },
+    { "id": 91356735132, "name": "Pitchers Örebro", "sid": "S0002462" }
+  ],
+  "sections": [
+    { "id": 61374724, "name": "Main Bar", "locationID": 91356735131 },
+    { "id": 61374725, "name": "Outdoor Patio", "locationID": 91356735131 },
+    { "id": 1, "name": "RESTAURANG", "locationID": 91356735132 }
+  ]
+}
+
