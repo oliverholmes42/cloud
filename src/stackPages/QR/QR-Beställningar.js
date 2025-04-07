@@ -28,8 +28,7 @@ export default function QRBestäLlningar(){
     },[])
 
     const openReciept = async (item) => {
-        const res = await getOrder(item.order00.orderid, location.location.sid) ?? {}
-        console.log(res);
+        const res = await getOrder(location.location.sid, item.order00.orderid) ?? {}
 
         const route = {title: `${res.order.order00.datum}-${res.order.order00.orderid}`, page: <Order data={res}/> }
         push(route)

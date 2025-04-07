@@ -7,6 +7,7 @@ export default function Order({ data}) {
     const company = data.sbo?.cfg?.ftg || {};
     const items = cart.rows || [];
 
+
     const toCurrency = (val) => {
         let num = parseInt(val || "0", 10) / 100;
         return num.toFixed(2);

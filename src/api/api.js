@@ -27,7 +27,6 @@ String.prototype.fromswe = function() {
     return sv;
 };
 
-
 export async function loginToken() {
     const uid = "pitchersorebro@kund.svepos.se";
     let pwd = "pub2024";
@@ -438,17 +437,15 @@ export async function fetchOrders(token, location) {
     return null
 }
 
-export function getOrder(orderid, sid){
+
+export async function getOrder(sid, orderid) {
     const prm = {
-        req: "vcm.ecom.order_get",
-        orderid,
-        sid
+        req: "vcm.ecom.ecom_morder",
+        sid,
+        orderid
     };
 
-    return net.sio_req(prm)
-        .catch(function(e){
-            console.log(JSON.parse(e))
-        });
+    return net.sio_req(prm);
 }
 
 export function fetchTransactionList(token, location, fdat = "24-11-24", tdat = "24-11-25"){
