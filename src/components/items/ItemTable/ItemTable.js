@@ -22,6 +22,7 @@ export default function ItemTable({
                                     date,
                                     canEdit = true,
                                       canRemove= true,
+    canAdd = true,
                                   }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [multi, setMulti] = useState([]);
@@ -186,8 +187,8 @@ export default function ItemTable({
   return (
       <>
         <div style={{display: "flex", padding: "10px", justifyContent: "space-between"}}>
-          <button className="hoverable desktop" onClick={goToAdd}>Skapa ny</button>
-          <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd}/>
+            {canAdd && <button className="hoverable desktop" onClick={goToAdd}>Skapa ny</button>}
+            {canAdd && <FloatingButton className="mobile" text="Lägg till Ny" onClick={goToAdd}/>}
           <SearchBar onSearch={search}/>
         </div>
           <DateSelect/>

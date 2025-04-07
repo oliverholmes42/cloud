@@ -426,6 +426,31 @@ export function fetchReceiptList(token, location, fdat = "24-11-24", tdat = "24-
         });
 }
 
+export async function fetchOrders(token, location) {
+    const prm = {req:"pos.pos_ecom_order.order_list",
+    token,
+    sid: location
+    }
+    const response = await net.sio_req(prm)
+    if(response.ok){
+        return response.rca
+    }
+    return null
+}
+
+export function getOrder(orderid, sid){
+    const prm = {
+        req: "vcm.ecom.order_get",
+        orderid,
+        sid
+    };
+
+    return net.sio_req(prm)
+        .catch(function(e){
+            console.log(JSON.parse(e))
+        });
+}
+
 export function fetchTransactionList(token, location, fdat = "24-11-24", tdat = "24-11-25"){
     const prm = {
         req: "pos.pos_trs.trs_per",

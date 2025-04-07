@@ -9,11 +9,26 @@ import { useStack } from "../StackContext";
 import InvoicePage from "../navPages/InvoicePage";
 import IntegrationPage from "../navPages/IntegrationPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faBoxesStacked, faCashRegister, faChartSimple, faChevronLeft, faFileLines, faGaugeHigh, faGears, faPlug, faRightFromBracket, faUserTie, faX } from "@fortawesome/free-solid-svg-icons";
+import {
+    faBars,
+    faBoxesStacked,
+    faCashRegister,
+    faChartSimple,
+    faChevronLeft,
+    faFileLines,
+    faGaugeHigh,
+    faGears,
+    faPlug,
+    faQrcode,
+    faRightFromBracket,
+    faUserTie,
+    faX
+} from "@fortawesome/free-solid-svg-icons";
 import PlaceholderPage from "../stackPages/PlaceholderPage";
 import HardWarePage from "../navPages/HardWarePage";
 import AdminPage from "../navPages/AdminPage";
 import ReportsPage from "../navPages/ReportsPage";
+import QRPage from "../navPages/QRPage";
 
 export const routes = [
     [
@@ -27,7 +42,8 @@ export const routes = [
 
     ],
     [
-        {title: "Rapporter", page: <ReportsPage/>, icon: faChartSimple}
+        {title: "Rapporter", page: <ReportsPage/>, icon: faChartSimple},
+        {title: "QR-Systen", page: <QRPage/>, icon: faQrcode},
     ],
     [
         {title: "Administration", page: <AdminPage/>, icon: faUserTie },

@@ -1,10 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import ItemTable from "../../components/items/ItemTable/ItemTable";
-import {cop, copyReceipt, fetchReceiptList} from "../../api/api";
-import { AuthContext } from "../../AuthContext";
+import {cop, fetchReceiptList} from "../../api/api";
+import {AuthContext} from "../../AuthContext";
 import Receipt from "../../components/Reciept/Receipt";
 import {useStack} from "../../StackContext";
-import Products from "../articles/Products";
+
+export function customChecksum(s, d, n) {
+    // Custom logic here
+    // Example: Multiply ASCII codes of characters
+    const inputString = `${s}${d}${n}`;
+    let product = 1;
+    for (let i = 0; i < inputString.length; i++) {
+        product *= inputString.charCodeAt(i);
+    }
+    return (product % 1000000).toString().padStart(6, '0');
+}
 
 export default function RecieptsPage(){
     const [data, setData] = useState(null);
@@ -24,18 +34,6 @@ export default function RecieptsPage(){
             link: `https://kvitto.spaider.nu/?s=${location.location.sid}&d=${item?.datum||0}&n=${item?.notanr.trim()||0}&c=${customChecksum(location.location.sid, item?.datum||0,item?.notanr.trim()||0)}` // Add a link key with a value based on the item properties
         })));
 
-    }
-
-    function customChecksum(s, d, n) {
-        // Custom logic here
-        // Example: Multiply ASCII codes of characters
-        const inputString = `${s}${d}${n}`;
-        let product = 1;
-        for (let i = 0; i < inputString.length; i++) {
-            product *= inputString.charCodeAt(i);
-        }
-        const checksum = (product % 1000000).toString().padStart(6, '0');
-        return checksum;
     }
 
     const fields = [

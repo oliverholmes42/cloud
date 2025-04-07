@@ -140,6 +140,14 @@ export const renderValue = (field, value) => {
         return `${format?.prefix || ""}${parseFloat(value).toFixed(decimals)}${format?.suffix || ""}`;
     }
 
+    if (format?.type === "bool") {
+        const trueValue = format.trueValue ?? true;
+        const trueText = format.trueText ?? "Ja";
+        const falseText = format.falseText ?? "Nej";
+        return value == trueValue ? trueText : falseText;
+    }
+
+
 
 
     if (format?.type === "percentage") {
